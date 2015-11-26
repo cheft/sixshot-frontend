@@ -1,0 +1,17 @@
+<viewport>
+  <logo></logo>
+  <h1 onclick={hello}>Hello {opts.name}</h1>
+
+  <script>
+    console.log('init');
+
+    this.on('mount', function() {
+      console.log('mount');
+    });
+
+    hello() {
+      console.log('hello ' + this.opts.name);
+    }
+  </script>
+
+</viewport>

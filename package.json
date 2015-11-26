@@ -1,0 +1,26 @@
+{
+  "name": "sixshot-frontend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server  --display-error-details --colors --content-base ./ --hot --port 8888"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.coding.net/cheft/sixshot-frontend.git"
+  },
+  "author": "cheft",
+  "license": "ISC",
+  "dependencies": {
+    "riot": "^2.3.11",
+    "superagent": "^1.4.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.18.0",
+    "riotjs-loader": "^1.2.0",
+    "style-loader": "^0.12.4",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
+  }
+}
