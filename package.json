@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server  --display-error-details --colors --content-base ./ --hot --port 8888"
+    "start": "webpack-dev-server  --display-error-details --colors --content-base ./ --hot --host 0.0.0.0 --port 8080"
   },
   "repository": {
     "type": "git",
