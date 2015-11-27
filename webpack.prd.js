@@ -5,7 +5,6 @@ var webpack = require('webpack');
 var config = {
   entry: {
     main: [
-      'webpack/hot/dev-server',
       path.resolve(__dirname, 'main.js')
     ]
   },
@@ -17,6 +16,12 @@ var config = {
   plugins: [
     new webpack.ProvidePlugin({
       riot: 'riot'
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+        drop_console: true
+      }
     })
   ],
   module: {
