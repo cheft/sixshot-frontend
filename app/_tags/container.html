@@ -1,0 +1,8 @@
+<container>
+  <div riot-tag={opts.path}></div>
+  <script>
+    this.on('mount', function() {
+      riot.mount(this.opts.path);
+    })
+  </script>
+</container>
