@@ -1,17 +1,10 @@
 <viewport>
-  <logo></logo>
-  <h1 onclick={hello}>Hello {opts.name}</h1>
-
+  <logo />
+  <nav />
+  <div riot-tag={opts.path}></div>
   <script>
-    console.log('init');
-
     this.on('mount', function() {
-      console.log('mount');
-    });
-
-    hello() {
-      console.log('hello ' + this.opts.name);
-    }
+      riot.mount(this.opts.path);
+    })
   </script>
-
 </viewport>

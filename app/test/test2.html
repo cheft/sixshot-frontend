@@ -1,0 +1,15 @@
+<test2>
+  <h1 onclick={hello}>hello</h1>
+
+  <script>
+    console.log('init');
+
+    this.on('mount', function() {
+      console.log('mount');
+    });
+
+    hello() {
+      console.log('hello cheft');
+    }
+  </script>
+</test2>
