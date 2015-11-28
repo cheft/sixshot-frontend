@@ -1,7 +1,7 @@
 var riot = window.riot = require('riot');
 require('css/app.css');
 
-var HOMEPAGE = 'homepage';
+var HOMEPAGE = 'dialog';
 
 var activeMenu = function(path) {
   if(path === HOMEPAGE) {
