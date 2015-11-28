@@ -47,18 +47,18 @@
                             <th>内容</th>
                             <th style="width: 50px">操作</th>
                           </tr>
-                          <tr each={q, i in queList}>
+                          <tr each={q, i in asks}>
                             <td>{i + 1}</td>
                             <td>{q}</td>
-                            <td><span class="btn badge bg-red" onclick={delQue}>删除</span></td>
+                            <td><span class="btn badge bg-red" onclick={delAsk}>删除</span></td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                     <div class="box-footer">
                       <div class="input-group">
-                        <input type="text" class="form-control" name="newque" placeholder="输入问题添加到列表" onkeypress={addQue}>
-                        <div class="input-group-addon btn" onclick={addQue}>
+                        <input type="text" class="form-control" name="newask" placeholder="输入问题添加到列表" onkeypress={addAsk}>
+                        <div class="input-group-addon btn" onclick={addAsk}>
                           <i class="fa fa-plus"></i>
                         </div>
                       </div>
@@ -78,18 +78,18 @@
                             <th>内容</th>
                             <th style="width: 50px">操作</th>
                           </tr>
-                          <tr each={a, i in ansList}>
+                          <tr each={a, i in answers}>
                             <td>{i + 1}</td>
                             <td>{a}</td>
-                            <td><span class="btn badge bg-red" onclick={delAns}>删除</span></td>
+                            <td><span class="btn badge bg-red" onclick={delAnswer}>删除</span></td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                     <div class="box-footer">
                       <div class="input-group">
-                        <input type="text" class="form-control" name="newans" placeholder="输入答案添加到列表" onkeypress={addAns}>
-                        <div class="input-group-addon btn" onclick={addAns}>
+                        <input type="text" class="form-control" name="newanswer" placeholder="输入答案添加到列表" onkeypress={addAnswer}>
+                        <div class="input-group-addon btn" onclick={addAnswer}>
                           <i class="fa fa-plus"></i>
                         </div>
                       </div>
@@ -109,8 +109,8 @@
   </section>
   <script>
   var _this = this;
-  this.queList = [];
-  this.ansList = [];
+  this.asks = [];
+  this.answers = [];
 
   this.on('mount', function() {
     $('.select2').select2();
@@ -118,7 +118,7 @@
 
   add(key, e) {
     var newkey = 'new' + key;
-    var listkey = key + 'List';
+    var listkey = key + 's';
     if (!this[newkey].value) {
       return true;
     }
@@ -131,30 +131,30 @@
   }
 
   del(key, e) {
-    this[key + 'List'].splice(e.item.i, 1);
+    this[key + 's'].splice(e.item.i, 1);
     this.update();
   }
 
-  addQue(e) {
-    this.add('que', e);
+  addAsk(e) {
+    this.add('ask', e);
     return true
   }
 
-  addAns(e) {
-    this.add('ans', e);
+  addAnswer(e) {
+    this.add('answer', e);
     return true;
   }
 
-  delQue(e) { this.del('que', e); }
-  delAns(e) { this.del('ans', e); }
+  delAsk(e) { this.del('ask', e); }
+  delAnswer(e) { this.del('answer', e); }
 
   saveDialog() {
     var formData = {
       id: this.id.value,
       type: this.type.value,
       name: this.name.value,
-      queList: this.queList,
-      ansList: this.ansList
+      asks: this.asks,
+      answers: this.answers
     }
     console.log(formData);
     // location.href = '/#!dialog';
