@@ -23,41 +23,22 @@
               <tr>
                 <th>#</th>
                 <th>对话描述</th>
+                <th>场景</th>
                 <th>用户</th>
                 <th>创建时间</th>
-                <th>采纳时间</th>
+                <th>是否采纳</th>
                 <th>操作</th>
               </tr>
-              <tr>
-                <td>183</td>
-                <td><a href="/#!dialog-form">Bacon ipsum dolor sit amet salami venison.</a></td>
-                <td>John Doe</td>
-                <td>11-7-2014</td>
-                <td><span class="label label-success">Approved</span></td>
-                <td><a href="/#">采纳</td>
-              </tr>
-              <tr>
-                <td>219</td>
-                <td><a href="/#!dialog-form">Bacon ipsum dolor sit amet salami venison.</a></td>
-                <td>Alexander Pierce</td>
-                <td>11-7-2014</td>
-                <td><span class="label label-warning">Pending</span></td>
-                <td><a href="/#">采纳</td>
-              </tr>
-              <tr>
-                <td>657</td>
-                <td><a href="/#!dialog-form">Bacon ipsum dolor sit amet salami venison.</a></td>
-                <td>Bob Doe</td>
-                <td>11-7-2014</td>
-                <td><span class="label label-primary">Approved</span></td>
-                <td><a href="/#">采纳</td>
-              </tr>
-              <tr>
-                <td>175</td>
-                <td><a href="/#!dialog-form">Bacon ipsum dolor sit amet salami venison.</a></td>
-                <td>Mike Doe</td>
-                <td>11-7-2014</td>
-                <td><span class="label label-danger">Denied</span></td>
+              <tr each={item, i in list}>
+                <td>{i + 1}</td>
+                <td><a href="/#!dialog-form/{item.id}">{item.name}</a></td>
+                <td>{item.sceneName}</td>
+                <td>{item.creatorName}</td>
+                <td></td>
+                <td>
+                  <span if={item.audited} class="label label-success">已采纳</span>
+                  <span if={!item.audited} class="label label-warning">未采纳</span>
+                </td>
                 <td><a href="/#">采纳</td>
               </tr>
             </table>
@@ -66,4 +47,19 @@
       </div>
     </div>
   </section>
+
+  <script>
+    var _this = this;
+    this.on('mount', function() {
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/dialog/list',
+        type: 'get'
+      }).done(function(data) {
+        console.log(data);
+        _this.update(data);
+      }).fail(function() {
+        console.log('error');
+      })
+    });
+  </script>
 </dialog>

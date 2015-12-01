@@ -2,7 +2,7 @@
   <div riot-tag={opts.path}></div>
   <script>
     this.on('mount', function() {
-      riot.mount(this.opts.path);
+      riot.mount(this.opts.path, this.opts);
     })
   </script>
 </container>

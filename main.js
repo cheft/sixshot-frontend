@@ -1,5 +1,6 @@
 var riot = window.riot = require('riot');
 require('css/app.css');
+riot.config = require('./config');
 
 var HOMEPAGE = 'dialog';
 
@@ -23,6 +24,12 @@ window.onload = function() {
     riot.mount('navigator');
     riot.mount('container', {path: path});
     activeMenu(path);
+  });
+
+  riot.route('/dialog-form/*', function(path) {
+    riot.mount('navigator');
+    var tag = riot.mount('container', {path: 'dialog-form', pathId: path});
+    activeMenu('dialog-form');
   });
 
   riot.route.base('#!')

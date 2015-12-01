@@ -31,7 +31,7 @@
               </div>
               <div class="form-group">
                 <label for="desc">对话描述</label>
-                <input type="text" class="form-control" name="name" placeholder="对话描述">
+                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="对话描述">
               </div>
               <div class="row">
                 <div class="col-md-6">
@@ -49,7 +49,7 @@
                           </tr>
                           <tr each={q, i in asks}>
                             <td>{i + 1}</td>
-                            <td>{q}</td>
+                            <td>{q.content}</td>
                             <td><span class="btn badge bg-red" onclick={delAsk}>删除</span></td>
                           </tr>
                         </tbody>
@@ -80,7 +80,7 @@
                           </tr>
                           <tr each={a, i in answers}>
                             <td>{i + 1}</td>
-                            <td>{a}</td>
+                            <td>{a.content}</td>
                             <td><span class="btn badge bg-red" onclick={delAnswer}>删除</span></td>
                           </tr>
                         </tbody>
@@ -111,10 +111,25 @@
   var _this = this;
   this.asks = [];
   this.answers = [];
-
   this.on('mount', function() {
     $('.select2').select2();
+    this.fill();
   });
+
+  fill() {
+    if (!this.opts.pathId) {
+      return;
+    }
+
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/edit/' + this.opts.pathId,
+      type: 'get',
+    }).done(function(data) {
+      _this.update(data);
+    }).fail(function() {
+      console.log('error');
+    })
+  }
 
   add(key, e) {
     var newkey = 'new' + key;
@@ -124,7 +139,7 @@
     }
 
     if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
-      this[listkey].push(this[newkey].value);
+      this[listkey].push({content: this[newkey].value});
       this.update();
       this[newkey].value = '';
     }
@@ -151,13 +166,26 @@
   saveDialog() {
     var formData = {
       id: this.id.value,
-      type: this.type.value,
-      name: this.name.value,
+      'dialog.sceneName': this.type.value,
+      'dialog.name': this.name.value,
       asks: this.asks,
       answers: this.answers
     }
     console.log(formData);
+    this.post(formData);
     // location.href = '/#!dialog';
+  }
+
+  post(data) {
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/save',
+      type: 'post',
+      data: data
+    }).done(function(data) {
+      console.log(data);
+    }).fail(function() {
+      console.log('error');
+    })
   }
   
   cancel() {
