@@ -1,18 +1,20 @@
 <login>
   <div class="login-box">
     <div class="login-logo">
-      <a href="/"><b>Admin</b>LTE</a>
+      <a href="/"><b>用户登录</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
+<!-- 
       <p class="login-box-msg">Sign in to start your session</p>
-      <form action="../../index2.html" method="post">
+       -->
+      <form method="post">
         <div class="form-group has-feedback">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="text" name="userName"  class="form-control" placeholder="账户名称">
           <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="账户密码">
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="row">
@@ -25,7 +27,7 @@
           </div>
           <!-- /.col -->
           <div class="col-xs-4">
-            <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+            <button type="submit" class="btn btn-primary btn-block btn-flat" onclick={login}>登录</button>
           </div>
           <!-- /.col -->
         </div>
@@ -43,4 +45,32 @@
     <!-- /.login-box-body -->
   </div>
   <!-- /.login-box -->
+
+  <script>
+  var _this = this;
+
+  login() {
+    var formData = {
+      'user.userName': this.userName.value,
+      'user.password': this.password.value
+    }
+    console.log(formData);
+
+    $.ajax({
+      url: riot.config.apiPrefix + 'system/user/login',
+      type: 'post',
+      data: formData
+    }).done(function(data) {
+      console.log(data);
+      if(data.result=='true'){
+        riot.route('dialog');
+      }else{
+        // 提示错误信息
+      }
+    }).fail(function() {
+      console.log('error');
+    })
+
+  }
+  </script>
 </login>

@@ -1,12 +1,12 @@
-<dialog>
+<user>
   <section class="content-header">
     <h1>
-      对话列表
-      <small>可查看您录入的所有对话列表</small>
+      用户列表
+      <small>可查所有用户列表</small>
     </h1>
     <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
-      <li class="active">对话列表</li>
+      <li><a href="#"><i class="fa fa-dashboard"></i> 系统</a></li>
+      <li class="active">用户管理</li>
     </ol>
   </section>
   <section class="content">
@@ -15,32 +15,30 @@
         <div class="box">
           <div class="box-header">
             <div class="box-title">
-              <a href="/#!dialog-form" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 增加</a>
+              <a href="/#!user-form" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 增加</a>
             </div>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
               <tr>
                 <th>#</th>
-                <th>对话描述</th>
-                <th>场景</th>
-                <th>用户</th>
-                <th>创建时间</th>
-                <th>是否采纳</th>
+                <th>账户</th>
+                <th>昵称</th>
+                <th>类型</th>
+                <th>是否审核</th>
                 <th>操作</th>
               </tr>
               <tr each={item, i in list}>
                 <td>{i + 1}</td>
-                <td><a href="/#!dialog-form/{item.id}">{item.name}</a></td>
-                <td>{item.sceneName}</td>
-                <td>{item.creatorName}</td>
-                <td>{item.createDate}</td>
+                <td><a href="/#!user-form/{item.id}">{item.userName}</a></td>
+                <td>{item.nickName}</td>
+                <td>{item.type}</td>
                 <td>
-                  <span if={item.audited} class="label label-success">已采纳</span>
-                  <span if={!item.audited} class="label label-warning">未采纳</span>
+                  <span if={item.audited} class="label label-success">已审核</span>
+                  <span if={!item.audited} class="label label-warning">未审核</span>
                 </td>
                 <td>
-                  <span if={!item.audited} ><a id={item.id} href="/#" onclick={audit}>采纳</span>
+                  <span if={!item.audited} ><a id={item.id} href="/#" onclick={audit}>通过</span>
                 </td>
               </tr>
             </table>
@@ -54,10 +52,10 @@
     var _this = this;
     this.on('mount', function() {
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/list',
+        url: riot.config.apiPrefix + 'system/user/list',
         type: 'get'
       }).done(function(data) {
-        console.log(data);
+        console.log('user list ' + data);
         _this.update(data);
       }).fail(function() {
         console.log('error');
@@ -68,12 +66,12 @@
       console.log('e:' + event.target);
       var id = event.target.id;
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/audit/' + id,
+        url: riot.config.apiPrefix + 'system/user/audit/' + id,
         type: 'get'
       }).done(function(data) {
         if(data.result=='true'){
           console.log('审核成功');
-          riot.route('dialog');
+          riot.route('user');
         }else{
           console.log('审核失败');
         }
@@ -82,4 +80,4 @@
       })
     }
   </script>
-</dialog>
+</user>

@@ -1,25 +1,27 @@
 <register>
   <div class="register-box">
     <div class="register-logo">
-      <a href="../../index2.html"><b>Admin</b>LTE</a>
+      <a href="../../index2.html"><b>用户注册</b></a>
     </div>
     <div class="register-box-body">
+<!-- 
       <p class="login-box-msg">Register a new membership</p>
-      <form action="../../index.html" method="post">
+       -->
+      <form method="post">
         <div class="form-group has-feedback">
-          <input type="text" class="form-control" placeholder="Full name">
+          <input type="text" name="nickName" class="form-control" placeholder="昵称">
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="text" name="userName" class="form-control" placeholder="账户名称（登录时使用）" onblur={validateUserExist}>
           <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="密码">
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Retype password">
+          <input type="password" name="confirm-password" class="form-control" placeholder="确认密码" onblur={confirmPassword}>
           <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
         </div>
         <div class="row">
@@ -32,7 +34,7 @@
           </div>
           <!-- /.col -->
           <div class="col-xs-4">
-            <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+            <button type="submit" class="btn btn-primary btn-block btn-flat" onclick={register}>注册</button>
           </div>
           <!-- /.col -->
         </div>
@@ -46,5 +48,66 @@
     </div>
     <!-- /.form-box -->
   </div>
-  <!-- /.register-box -->
+  <script>
+  var _this = this;
+
+  validateUserExist(){
+    if(this.userName.value==""){
+      return;
+    }
+
+    $.ajax({
+      url: riot.config.apiPrefix + 'system/user/validate/' + this.userName.value,
+      type: 'post',
+      data: {}
+    }).done(function(data) {
+      console.log(data);
+      if(data.result=='true'){
+        //do nothing
+        console.log('用户名可以使用');
+      }else{
+        // 提示用户已存在
+        console.log('用户已存在');
+      }
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+
+  confirmPassword(){
+    if(this.password!=this['confirm-password']){
+      // this['confirm-password'].focus();
+      //TODO  密码验证
+    }
+  }
+
+  register() {
+    var formData = {
+      'user.nickName': this.nickName.value,
+      'user.userName': this.userName.value,
+      'user.password': this.password.value
+    }
+    console.log(formData);
+    this.post(formData);
+    // location.href = '/#!dialog';
+  }
+
+  post(data) {
+    $.ajax({
+      url: riot.config.apiPrefix + 'system/user/register',
+      type: 'post',
+      data: data
+    }).done(function(data) {
+      console.log(data);
+      if(data.result=='true'){
+        riot.route('login');
+      }else{
+        // riot.route('login');
+        //TODO 提示错误，注册失败
+      }
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+  </script>
 </register>

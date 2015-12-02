@@ -21,6 +21,7 @@ window.onload = function() {
   });
 
   riot.route('/*', function(path) {
+    console.log('path :' + path);
     riot.mount('navigator');
     riot.mount('container', {path: path});
     activeMenu(path);

@@ -1,3 +1,3 @@
 module.exports = {
-  apiPrefix: 'api/'
+  apiPrefix: 'http://localhost:8080/sixshot-train/'
 }
