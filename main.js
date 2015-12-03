@@ -10,7 +10,7 @@ var activeMenu = function(path) {
   }
 
   $('.sidebar-menu li.active').removeClass('active');
-  $('.sidebar-menu a[href="/#!' + path + '"]').parent().addClass('active');
+  $('.sidebar-menu a[href="/#' + path + '"]').parent().addClass('active');
 };
 
 window.onload = function() {
@@ -33,6 +33,6 @@ window.onload = function() {
     activeMenu('dialog-form');
   });
 
-  riot.route.base('#!')
+  riot.route.base('#')
   riot.route.start(true);
 }

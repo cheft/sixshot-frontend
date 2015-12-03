@@ -14,8 +14,7 @@
   "author": "cheft",
   "license": "ISC",
   "dependencies": {
-    "riot": "^2.3.11",
-    "superagent": "^1.4.0"
+    "riot": "^2.3.11"
   },
   "devDependencies": {
     "css-loader": "^0.18.0",

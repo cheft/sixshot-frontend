@@ -4,13 +4,16 @@ var webpack = require('webpack');
 
 var config = {
   entry: {
-    main: [
+    app: [
       path.resolve(__dirname, 'main.js')
+    ],
+    login: [
+      path.resolve(__dirname, 'login.js')
     ]
   },
   output: {
     path: path.resolve(__dirname, 'assets/js'),
-    filename: 'app.js',
+    filename: '[name].js',
     publicPath: "/assets/js/"
   },
   plugins: [
@@ -52,7 +55,7 @@ var recurse = function(dir, root) {
         filename = path.relative(root, filename)
         filename = path.join(path.dirname(filename), path.basename(filename, ext));
         var e = filename.replace(/\\/g, '/');
-        config.entry.main.push(path.resolve(root, e + '.html'));
+        config.entry.app.push(path.resolve(root, e + '.html'));
       }
     }
   })
