@@ -4,9 +4,9 @@ var webpack = require('webpack');
 
 var config = {
   entry: {
-    app: [
+    index: [
       'webpack/hot/dev-server',
-      path.resolve(__dirname, 'main.js')
+      path.resolve(__dirname, 'index.js')
     ],
     login: [
       'webpack/hot/dev-server',
@@ -51,7 +51,7 @@ var recurse = function(dir, root) {
         filename = path.relative(root, filename)
         filename = path.join(path.dirname(filename), path.basename(filename, ext));
         var e = filename.replace(/\\/g, '/');
-        config.entry.app.push(path.resolve(root, e + '.html'));
+        config.entry.index.push(path.resolve(root, e + '.html'));
       }
     }
   })

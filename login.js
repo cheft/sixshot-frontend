@@ -16,7 +16,7 @@ window.onload = function() {
   
   riot.route('/*', function(path) {
     console.log(path, 404);
-  })
+  });
 
   riot.route.base('#')
   riot.route.start(true);

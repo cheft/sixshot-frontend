@@ -12,16 +12,16 @@
   <section class="content">
     <div class="row">
       <div class="col-xs-12">
-        <div class="box">
+        <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
           <div class="box-header">
             <div class="box-title">
-              <a href="/#!dialog-form" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 增加</a>
+              <a href="#dialog-form" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 增加</a>
             </div>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
               <tr>
-                <th>#</th>
+                <th style="text-align: center;">#</th>
                 <th>对话描述</th>
                 <th>场景</th>
                 <th>用户</th>
@@ -30,8 +30,8 @@
                 <th>操作</th>
               </tr>
               <tr each={item, i in list}>
-                <td>{i + 1}</td>
-                <td><a href="/#!dialog-form/{item.id}">{item.name}</a></td>
+                <td style="text-align: center;">{i + 1}</td>
+                <td><a href="#dialog-form/{item.id}">{item.name}</a></td>
                 <td>{item.sceneName}</td>
                 <td>{item.creatorName}</td>
                 <td>{item.createDate}</td>
@@ -40,8 +40,11 @@
                   <span if={!item.audited} class="label label-warning">未采纳</span>
                 </td>
                 <td>
-                  <span if={!item.audited} ><a id={item.id} href="/#" onclick={audit}>采纳</span>
+                  <span if={!item.audited} ><a id={item.id} href="#" onclick={audit}>采纳</span>
                 </td>
+              </tr>
+              <tr if={list.length == 0}>
+                <td colspan="7" style="text-align: center;">暂无数据 ！</td>
               </tr>
             </table>
           </div>

@@ -1,11 +1,11 @@
 <login>
   <div class="login-box">
     <div class="login-logo">
-      <b>尔木科技登录</b>
+      <b>尔木科技用户登录</b>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-<!-- 
+      <!-- 
       <p class="login-box-msg">Sign in to start your session</p>
        -->
       <form method="post">
@@ -21,7 +21,7 @@
           <div class="col-xs-8">
             <div class="checkbox icheck" style="margin-left: 20px;">
               <label>
-                <input type="checkbox"> 记住
+                <!-- <input type="checkbox"> 记住 -->
               </label>
             </div>
           </div>
@@ -58,14 +58,13 @@
     }).done(function(data) {
       console.log(data);
       if(data.result=='true'){
-        riot.route('dialog');
+        location.href = '/';
       }else{
         // 提示错误信息
       }
     }).fail(function() {
       console.log('error');
     })
-
   }
   </script>
 </login>
