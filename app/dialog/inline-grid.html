@@ -1,0 +1,31 @@
+<inline-grid>
+  <div class="box box-info box-solid">
+    <div class="box-header">
+      <h3 class="box-title">问题列表</h3>
+    </div>
+    <div class="box-body no-padding">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th>内容</th>
+            <th style="width: 50px">操作</th>
+          </tr>
+          <tr each={q, i in asks}>
+            <td>{i + 1}</td>
+            <td>{q.content}</td>
+            <td><span class="btn badge bg-red" onclick={delAsk}>删除</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box-footer">
+      <div class="input-group">
+        <input type="text" class="form-control" name="newask" placeholder="输入问题添加到列表" onkeypress={addAsk}>
+        <div class="input-group-addon btn" onclick={addAsk}>
+          <i class="fa fa-plus"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</inline-grid>

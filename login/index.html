@@ -1,6 +1,6 @@
 <login>
   <div class="login-box">
-    <div class="login-logo">
+    <div class="login-logo" style="color: #367fa9;">
       <b>尔木科技用户登录</b>
     </div>
     <!-- /.login-logo -->
@@ -14,7 +14,7 @@
           <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" name="password" class="form-control" placeholder="账户密码">
+          <input type="password" name="password" class="form-control" placeholder="账户密码" onkeyup={login}>
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="row">
@@ -44,27 +44,28 @@
   <script>
   var _this = this;
 
-  login() {
-    var formData = {
-      'user.userName': this.userName.value,
-      'user.password': this.password.value
-    }
-    console.log(formData);
-
-    $.ajax({
-      url: riot.config.apiPrefix + 'system/user/login',
-      type: 'post',
-      data: formData
-    }).done(function(data) {
-      console.log(data);
-      if(data.result=='true'){
-        location.href = '/';
-      }else{
-        // 提示错误信息
+  login(e) {
+    if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+      var formData = {
+        'user.userName': this.userName.value,
+        'user.password': this.password.value
       }
-    }).fail(function() {
-      console.log('error');
-    })
+
+      $.ajax({
+        url: riot.config.apiPrefix + 'system/user/login',
+        type: 'post',
+        data: formData
+      }).done(function(data) {
+        console.log(data);
+        if(data.result=='true'){
+          location.href = '/';
+        }else{
+          // 提示错误信息
+        }
+      }).fail(function() {
+        console.log('error');
+      })
+    }
   }
   </script>
 </login>

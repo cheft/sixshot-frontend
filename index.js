@@ -9,9 +9,11 @@ var activeMenu = function(path) {
   if(path === '/') {
     path =  HOMEPAGE;
   }
-
-  $('.sidebar-menu li.active').removeClass('active');
-  $('.sidebar-menu a[href="#' + path + '"]').parent().addClass('active');
+  var curMenu = $('.sidebar-menu a[href="#' + path + '"]');
+  if(curMenu.length > 0) {
+    $('.sidebar-menu li.active').removeClass('active');
+    curMenu.parent().addClass('active');
+  }
 };
 
 var mountSome = function(opts) {
@@ -24,6 +26,45 @@ var mountSome = function(opts) {
   riot.tags.container = riot.mount('container', opts);
   activeMenu(opts.path);
 }
+
+var activate = function(toggleBtn) {
+  //Get the screen sizes
+  var screenSizes = {
+    xs: 480,
+    sm: 768,
+    md: 992,
+    lg: 1200
+  };
+
+  //Enable sidebar toggle
+  $(toggleBtn).on('click', function (e) {
+    e.preventDefault();
+
+    //Enable sidebar push menu
+    if ($(window).width() > (screenSizes.sm - 1)) {
+      if ($("body").hasClass('sidebar-collapse')) {
+        $("body").removeClass('sidebar-collapse').trigger('expanded.pushMenu');
+      } else {
+        $("body").addClass('sidebar-collapse').trigger('collapsed.pushMenu');
+      }
+    }
+    //Handle sidebar push menu for small screens
+    else {
+      if ($("body").hasClass('sidebar-open')) {
+        $("body").removeClass('sidebar-open').removeClass('sidebar-collapse').trigger('collapsed.pushMenu');
+      } else {
+        $("body").addClass('sidebar-open').trigger('expanded.pushMenu');
+      }
+    }
+  });
+
+  $(".content-wrapper").click(function () {
+    //Enable hide menu when clicking on the content-wrapper on small screens
+    if ($(window).width() <= (screenSizes.sm - 1) && $("body").hasClass("sidebar-open")) {
+      $("body").removeClass('sidebar-open');
+    }
+  });
+};
 
 $.ajax({
   url: riot.config.apiPrefix + 'system/user/getLoginedUser',
@@ -44,7 +85,9 @@ $.ajax({
     mountSome({path: 'dialog-form', pathId: path})
   });
 
-  document.getElementById('wrapper').style.display = 'block';
+  $('#wrapper').show();
   riot.route.base('#')
   riot.route.start(true);
+
+  activate('.sidebar-toggle');
 });
