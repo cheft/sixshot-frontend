@@ -32,7 +32,7 @@
               <tr each={item, i in list}>
                 <td style="text-align: center;">{i + 1}</td>
                 <td><a href="#dialog-form/{item.id}">{item.name}</a></td>
-                <td>{item.sceneName}</td>
+                <td>{sceneMap[item.sceneName]}</td>
                 <td>{item.creatorName}</td>
                 <td>{item.createDate}</td>
                 <td>
@@ -40,7 +40,8 @@
                   <span if={!item.audited} class="label label-warning">未采纳</span>
                 </td>
                 <td>
-                  <a if={!item.audited} id={item.id} href="javascript:;" onclick={audit}>采纳</a>
+                  <a if={!item.audited} href="javascript:;" onclick={audit}>采纳</a>
+                  <a if={!item.audited} href="javascript:;" onclick={del}>删除</a>
                 </td>
               </tr>
               <tr if={list.length == 0}>
@@ -55,6 +56,12 @@
 
   <script>
     var _this = this;
+    this.sceneMap = {
+      chat: '聊天',
+      poem: '诗歌',
+      arithmetic: '算数',
+      english: '英语'
+    };
     this.on('mount', function() {
       this.fetch();
     });
@@ -69,9 +76,9 @@
       })
     }
 
-    audit(){
-      console.log('e:' + event.target);
-      var id = event.target.id;
+    audit(e){
+      console.log(e);
+      var id = e.item.item.id;
       $.ajax({
         url: riot.config.apiPrefix + 'knowledge/dialog/audit/' + id,
         type: 'get'
@@ -81,6 +88,23 @@
           _this.fetch();
         }else{
           console.log('审核失败');
+        }
+      }).fail(function() {
+        console.log('error');
+      })
+    }
+
+    del(e) {
+      var id = e.item.item.id;
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/dialog/delete/' + id,
+        type: 'get'
+      }).done(function(data) {
+        if(data.result=='true'){
+          console.log('删除成功');
+          _this.fetch();
+        }else{
+          console.log('删除失败');
         }
       }).fail(function() {
         console.log('error');

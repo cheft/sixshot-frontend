@@ -15,15 +15,15 @@
       <div class="col-md-12">
         <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
           <form role="form">
-            <input name="id" type="hidden">
+            <input name="id" type="hidden" value="{dialog.id}">
             <div class="box-body">
               <div class="form-group">
                 <label for="type">对话场景类型</label>
-                <select class="form-control select2" name="type" style="width: 100%;">
-                  <option selected="selected" value="chat">聊天</option>
-                  <option value="poem">诗歌</option>
-                  <option value="arithmetic">算数</option>
-                  <option value="english">英语</option>
+                <select class="form-control select2" name="sceneName" style="width: 100%;">
+                  <option selected={dialog.sceneName == 'chat'} value="chat">聊天</option>
+                  <option selected={dialog.sceneName == 'poem'} selected value="poem">诗歌</option>
+                  <option selected={dialog.sceneName == 'arithmetic'} value="arithmetic">算数</option>
+                  <option selected={dialog.sceneName == 'english'} value="english">英语</option>
                 </select>
               </div>
               <div class="form-group">
@@ -111,6 +111,9 @@
   this.on('mount', function() {
     $('.select2').select2();
     this.fill();
+  })
+  .on('updated', function() {
+    $('.select2').select2();
   });
 
   fill() {
@@ -163,18 +166,19 @@
   saveDialog() {
     var formData = {
       id: this.id.value,
-      'dialog.sceneName': this.type.value,
+      'dialog.sceneName': this.sceneName.value,
       'dialog.name': this.name.value,
       asks: JSON.stringify(this.asks),
       answers: JSON.stringify(this.answers)
     }
-    console.log(formData);
-    this.post(formData);
+
+    this.save(formData);
   }
 
-  post(data) {
+  save(data) {
+    var url = riot.config.apiPrefix + 'knowledge/dialog/' + (data.id ? 'update' : 'save');
     $.ajax({
-      url: riot.config.apiPrefix + 'knowledge/dialog/save',
+      url: url,
       type: 'post',
       data: data
     }).done(function(data) {
