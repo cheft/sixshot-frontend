@@ -81,8 +81,8 @@ $.ajax({
     mountSome({path: path})
   });
 
-  riot.route('/dialog-form/*', function(path) {
-    mountSome({path: 'dialog-form', pathId: path})
+  riot.route('/*/*', function(path, pathId) {
+    mountSome({path: path, pathId: pathId})
   });
 
   $('#wrapper').show();

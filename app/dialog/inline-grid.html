@@ -1,7 +1,10 @@
 <inline-grid>
-  <div class="box box-info box-solid">
+  <div class="box box-{opts.theme} box-solid">
     <div class="box-header">
       <h3 class="box-title">{opts.title}</h3>
+      <div class="box-tools" if={!opts.readonly}>
+        <a href="javascript:;" class="btn btn-xs bg-purple" onclick={startEdit}><i class="fa fa-edit"></i> 开启编辑</a>
+      </div>
     </div>
     <div class="box-body no-padding">
       <table class="table table-striped">
@@ -9,23 +12,71 @@
           <tr>
             <th style="width: 10px">#</th>
             <th>内容</th>
-            <th style="width: 50px">操作</th>
+            <th if={!editing} style="width: 50px">操作</th>
           </tr>
-          <tr each={q, i in asks}>
-            <td>{i + 1}</td>
-            <td>{q.content}</td>
-            <td><span class="btn badge bg-red" onclick={delAsk}>删除</span></td>
+          <tr each={l, i in list}>
+            <td if={!editing}>{i + 1}</td>
+            <td if={editing} style="line-height: 32px;">{i + 1}</td>
+            <td>
+              <span if={!editing}>{l.content}</span>
+              <input if={editing} type="text" class="js-item form-control" value={l.content}>
+            </td>
+            <td if={!editing} ><span class="btn badge bg-red" onclick={del}>删除</span></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="box-footer">
-      <div class="input-group">
-        <input type="text" class="form-control" name="newask" placeholder="输入问题添加到列表" onkeypress={addAsk}>
-        <div class="input-group-addon btn" onclick={addAsk}>
+    <div class="box-footer" if={!opts.readonly}>
+      <div if={!editing} class="input-group">
+        <input type="text" class="form-control" name="newitem" placeholder="输入问题添加到列表" onkeypress={add}>
+        <div class="input-group-addon btn" onclick={add}>
           <i class="fa fa-plus"></i>
         </div>
       </div>
+      <div if={editing}>
+        <button type="button" class="btn btn-primary" onclick={confirmEdit}>确认数据</button>
+        <button type="button" class="btn btn-cancel" onclick={stopEdit}>放弃编辑</button>
+      </div>
     </div>
   </div>
+
+  <script>
+    this.list = [];
+
+    add(e) {
+      if (!this.newitem.value) {
+        return true;
+      }
+
+      if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+        this.list.push({content: this.newitem.value});
+        this.update();
+        this.newitem.value = '';
+      }
+      return true;
+    }
+
+    del(e) {
+      this.list.splice(e.item.i, 1);
+      this.update();
+    }
+
+    startEdit(e) {
+      this.editing = true;
+      this.update();
+    }
+
+    confirmEdit(e) {
+      var items = this.root.querySelectorAll('.js-item');
+      for (var i = 0; i < items.length; i++) {
+        this.list[i] = {content: items[i].value};
+      }
+      this.stopEdit();
+    }
+
+    stopEdit() {
+      this.editing = false;
+      this.update(); 
+    }
+  </script>
 </inline-grid>

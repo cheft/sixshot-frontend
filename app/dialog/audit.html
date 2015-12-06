@@ -1,13 +1,13 @@
-<dialog-form>
+<dialog-audit>
   <section class="content-header">
     <h1>
       对话
-      <small>编辑或查看对话</small>
+      <small>审核对话</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
       <li><a href="#dialog">对话列表</a></li>
-      <li class="active">编辑对话</li>
+      <li class="active">审核对话</li>
     </ol>
   </section>
   <section class="content">
@@ -19,28 +19,36 @@
             <div class="box-body">
               <div class="form-group">
                 <label for="type">对话场景类型</label>
-                <select class="form-control select2" name="sceneName" style="width: 100%;">
-                  <option selected={dialog.sceneName == 'chat'} value="chat">聊天</option>
-                  <option selected={dialog.sceneName == 'poem'} selected value="poem">诗歌</option>
-                  <option selected={dialog.sceneName == 'arithmetic'} value="arithmetic">算数</option>
-                  <option selected={dialog.sceneName == 'english'} value="english">英语</option>
-                </select>
+                <div class="form-control" style="border-color: #ffe;">{sceneMap[dialog.sceneName]}</div>
               </div>
               <div class="form-group">
                 <label for="desc">对话描述</label>
-                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="对话描述">
+                <div class="form-control" style="border-color: #ffe;">{dialog.name}</div>
               </div>
               <div class="row">
                 <div class="col-md-6">
-                  <inline-grid name="asks" title="问题列表" theme="info"></inline-grid>
+                  <inline-grid name="asks" title="问题列表" theme="info" readonly="true"></inline-grid>
                 </div>
                 <div class="col-md-6">
-                  <inline-grid name="answers" title="答案列表" theme="warning"></inline-grid>
+                  <inline-grid name="fixasks" title="问题列表修正" theme="warning"></inline-grid>
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <inline-grid name="answers" title="答案列表" theme="info" readonly="true"></inline-grid>
+                </div>
+                <div class="col-md-6">
+                  <inline-grid name="fixanswers" title="答案列表修正" theme="warning"></inline-grid>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="desc">意见</label>
+                <input name="auditContent" class="form-control" type="text">
               </div>
             </div>
             <div class="box-footer">
-              <button type="button" class="btn btn-primary" onclick={saveDialog}>保存</button>
+              <button type="button" class="btn btn-primary" onclick={audit}>采纳</button>
+              <button type="button" class="btn btn-warning" onclick={reject}>不采纳</button>
               <button type="button" class="btn btn-cancel" onclick={cancel}>取消</button>
             </div>
           </form>
@@ -49,13 +57,16 @@
     </div>
   </section>
   <script>
+  this.sceneMap = {
+    chat: '聊天',
+    poem: '诗歌',
+    arithmetic: '算数',
+    english: '英语'
+  };
+
   var _this = this;
   this.on('mount', function() {
-    $('.select2').select2();
     this.fill();
-  })
-  .on('updated', function() {
-    $('.select2').select2();
   });
 
   fill() {
@@ -68,27 +79,29 @@
       type: 'get',
     }).done(function(data) {
       _this.tags.asks.list = data.asks;
+      _this.tags.fixasks.list = data.asks;
       _this.tags.answers.list = data.answers;
+      _this.tags.fixanswers.list = data.answers;
       _this.update(data);
     }).fail(function() {
       console.log('error');
     })
   }
 
-  saveDialog() {
+  getFormData() {
     var formData = {
       id: this.id.value,
-      'dialog.sceneName': this.sceneName.value,
-      'dialog.name': this.name.value,
-      asks: JSON.stringify(this.tags.asks.list),
-      answers: JSON.stringify(this.tags.answers.list)
+      asks: JSON.stringify(this.tags.fixasks.list),
+      answers: JSON.stringify(this.tags.fixanswers.list),
+      auditContent: this.auditContent.value
     }
 
-    this.save(formData);
+    return formData;
   }
 
-  save(data) {
-    var url = riot.config.apiPrefix + 'knowledge/dialog/' + (data.id ? 'update' : 'save');
+  audit() {
+    var data = this.getFormData();
+    var url = riot.config.apiPrefix + 'knowledge/dialog/audit/' + data.id
     $.ajax({
       url: url,
       type: 'post',
@@ -102,9 +115,14 @@
       console.log('error');
     })
   }
+
+  reject(data) {
+    var data = this.getFormData();
+    // :TODO 不采纳
+  }
   
   cancel() {
     location.href = '#dialog';
   }
   </script>
-</dialog-form>
+</dialog-audit>
