@@ -88,12 +88,11 @@
       type: 'post',
       data: data
     }).done(function(data) {
-      console.log(data);
-      if(data.result=='true'){
+      if(data.result == 'true'){
+        $.notify('<strong>注册成功！</strong>', {type: 'success'});
         riot.route('/');
       }else{
-        // riot.route('login');
-        //TODO 提示错误，注册失败
+        $.notify('<strong>注册失败：</strong>' + data.result, {type: 'error'});
       }
     }).fail(function() {
       console.log('error');

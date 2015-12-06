@@ -96,6 +96,7 @@
     }).done(function(data) {
       console.log(data);
       if (data.result == 'true') {
+        $.notify('<strong>保存成功！</strong>', {type: 'success'});
         riot.route('dialog');
       }
     }).fail(function() {

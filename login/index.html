@@ -56,11 +56,10 @@
         type: 'post',
         data: formData
       }).done(function(data) {
-        console.log(data);
-        if(data.result=='true'){
+        if(data.result == 'true'){
           location.href = '/';
         }else{
-          // 提示错误信息
+          $.notify('<strong>登录失败：</strong>' + data.result, {type: 'error'});
         }
       }).fail(function() {
         console.log('error');
