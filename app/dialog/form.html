@@ -170,7 +170,6 @@
     }
     console.log(formData);
     this.post(formData);
-    // location.href = '/#!dialog';
   }
 
   post(data) {
@@ -180,6 +179,9 @@
       data: data
     }).done(function(data) {
       console.log(data);
+      if (data.result == 'true') {
+        riot.route('dialog');
+      }
     }).fail(function() {
       console.log('error');
     })

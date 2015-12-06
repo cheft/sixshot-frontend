@@ -33,7 +33,7 @@
                   <span if={!item.audited} class="label label-warning">未审核</span>
                 </td>
                 <td>
-                  <span if={!item.audited} ><a id={item.id} href="/#" onclick={audit}>通过</span>
+                  <a if={!item.audited} id={item.id} href='javascript:;' onclick={audit}>通过</a>
                 </td>
               </tr>
             </table>
@@ -46,6 +46,10 @@
   <script>
     var _this = this;
     this.on('mount', function() {
+      this.fetch();
+    });
+
+    fetch() {
       $.ajax({
         url: riot.config.apiPrefix + 'system/user/list',
         type: 'get'
@@ -54,11 +58,10 @@
         _this.update(data);
       }).fail(function() {
         console.log('error');
-      })
-    });
+      });
+    }
 
     audit(){
-      console.log('e:' + event.target);
       var id = event.target.id;
       $.ajax({
         url: riot.config.apiPrefix + 'system/user/audit/' + id,
@@ -66,7 +69,7 @@
       }).done(function(data) {
         if(data.result=='true'){
           console.log('审核成功');
-          riot.route('user');
+          _this.fetch();
         }else{
           console.log('审核失败');
         }

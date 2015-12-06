@@ -1,5 +1,5 @@
 module.exports = {
-  apiPrefix: 'http://172.16.1.96:8080/sixshot-train/'
+  apiPrefix: 'http://127.0.0.1:8080/sixshot-train/'
   // apiPrefix: 'api/'
 }
 

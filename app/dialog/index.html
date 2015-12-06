@@ -40,7 +40,7 @@
                   <span if={!item.audited} class="label label-warning">未采纳</span>
                 </td>
                 <td>
-                  <span if={!item.audited} ><a id={item.id} href="#" onclick={audit}>采纳</span>
+                  <a if={!item.audited} id={item.id} href="javascript:;" onclick={audit}>采纳</a>
                 </td>
               </tr>
               <tr if={list.length == 0}>
@@ -56,16 +56,18 @@
   <script>
     var _this = this;
     this.on('mount', function() {
+      this.fetch();
+    });
+
+    fetch() {
       $.ajax({
         url: riot.config.apiPrefix + 'knowledge/dialog/list',
         type: 'get'
       }).done(function(data) {
-        console.log(data);
         _this.update(data);
       }).fail(function() {
-        console.log('error');
       })
-    });
+    }
 
     audit(){
       console.log('e:' + event.target);
@@ -76,7 +78,7 @@
       }).done(function(data) {
         if(data.result=='true'){
           console.log('审核成功');
-          riot.route('dialog');
+          _this.fetch();
         }else{
           console.log('审核失败');
         }
