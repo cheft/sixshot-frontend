@@ -1,0 +1,192 @@
+<user-form>
+  <section class="content-header">
+    <h1>
+      对话
+      <small>编辑或查看对话</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+      <li><a href="/#!dialog">对话列表</a></li>
+      <li class="active">编辑对话</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-primary">
+          <form role="form">
+            <input name="id" type="hidden">
+            <div class="box-body">
+              <div class="form-group">
+                <label for="type">对话场景类型</label>
+                <select class="form-control select2" name="type" style="width: 100%;">
+                  <option selected="selected" value="chat">聊天</option>
+                  <option value="poem">诗歌</option>
+                  <option value="arithmetic">算数</option>
+                  <option value="english">英语</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="desc">对话描述</label>
+                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="对话描述">
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="box box-info box-solid">
+                    <div class="box-header">
+                      <h3 class="box-title">问题列表</h3>
+                    </div>
+                    <div class="box-body no-padding">
+                      <table class="table table-striped">
+                        <tbody>
+                          <tr>
+                            <th style="width: 10px">#</th>
+                            <th>内容</th>
+                            <th style="width: 50px">操作</th>
+                          </tr>
+                          <tr each={q, i in asks}>
+                            <td>{i + 1}</td>
+                            <td>{q.content}</td>
+                            <td><span class="btn badge bg-red" onclick={delAsk}>删除</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="box-footer">
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="newask" placeholder="输入问题添加到列表" onkeypress={addAsk}>
+                        <div class="input-group-addon btn" onclick={addAsk}>
+                          <i class="fa fa-plus"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="box box-warning box-solid">
+                    <div class="box-header">
+                      <h3 class="box-title">答案列表</h3>
+                    </div>
+                    <div class="box-body no-padding">
+                      <table class="table table-striped">
+                        <tbody>
+                          <tr>
+                            <th style="width: 10px">#</th>
+                            <th>内容</th>
+                            <th style="width: 50px">操作</th>
+                          </tr>
+                          <tr each={a, i in answers}>
+                            <td>{i + 1}</td>
+                            <td>{a.content}</td>
+                            <td><span class="btn badge bg-red" onclick={delAnswer}>删除</span></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="box-footer">
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="newanswer" placeholder="输入答案添加到列表" onkeypress={addAnswer}>
+                        <div class="input-group-addon btn" onclick={addAnswer}>
+                          <i class="fa fa-plus"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="box-footer">
+              <button type="button" class="btn btn-primary" onclick={saveDialog}>保存</button>
+              <button type="button" class="btn btn-cancel" onclick={cancel}>取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+  var _this = this;
+  this.asks = [];
+  this.answers = [];
+  this.on('mount', function() {
+    $('.select2').select2();
+    this.fill();
+  });
+
+  fill() {
+    if (!this.opts.pathId) {
+      return;
+    }
+
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/edit/' + this.opts.pathId,
+      type: 'get',
+    }).done(function(data) {
+      _this.update(data);
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+
+  add(key, e) {
+    var newkey = 'new' + key;
+    var listkey = key + 's';
+    if (!this[newkey].value) {
+      return true;
+    }
+
+    if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+      this[listkey].push({content: this[newkey].value});
+      this.update();
+      this[newkey].value = '';
+    }
+  }
+
+  del(key, e) {
+    this[key + 's'].splice(e.item.i, 1);
+    this.update();
+  }
+
+  addAsk(e) {
+    this.add('ask', e);
+    return true
+  }
+
+  addAnswer(e) {
+    this.add('answer', e);
+    return true;
+  }
+
+  delAsk(e) { this.del('ask', e); }
+  delAnswer(e) { this.del('answer', e); }
+
+  saveDialog() {
+    var formData = {
+      id: this.id.value,
+      'dialog.sceneName': this.type.value,
+      'dialog.name': this.name.value,
+      asks: JSON.stringify(this.asks),
+      answers: JSON.stringify(this.answers)
+    }
+    console.log(formData);
+    this.post(formData);
+    // location.href = '/#!dialog';
+  }
+
+  post(data) {
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/save',
+      type: 'post',
+      data: data
+    }).done(function(data) {
+      console.log(data);
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+  
+  cancel() {
+    location.href = '/#!dialog';
+  }
+  </script>
+</user-form>

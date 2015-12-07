@@ -69,9 +69,10 @@
       }).done(function(data) {
         if(data.result=='true'){
           console.log('审核成功');
+          $.notify('<strong>审核成功！</strong>', {type: 'success'});
           _this.fetch();
         }else{
-          console.log('审核失败');
+          $.notify('<strong>登录失败：</strong>', {type: 'error'});
         }
       }).fail(function() {
         console.log('error');

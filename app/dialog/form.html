@@ -28,14 +28,14 @@
               </div>
               <div class="form-group">
                 <label for="desc">对话描述</label>
-                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="对话描述">
+                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="对话描述" onblur={validateName}>
               </div>
               <div class="row">
                 <div class="col-md-6">
-                  <inline-grid name="asks" title="问题列表" theme="info"></inline-grid>
+                  <inline-grid type="ask" name="asks" title="问题列表" theme="info"></inline-grid>
                 </div>
                 <div class="col-md-6">
-                  <inline-grid name="answers" title="答案列表" theme="warning"></inline-grid>
+                  <inline-grid type="answer" name="answers" title="答案列表" theme="warning"></inline-grid>
                 </div>
               </div>
             </div>
@@ -58,6 +58,23 @@
     $('.select2').select2();
   });
 
+  validateName(){
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/validate/' + this.name.value,
+      type: 'post',
+      data: {}
+    }).done(function(data) {
+      if(data.result=='true'){
+        console.log('对话可用');
+      }else{
+        _this.name.focus();
+        $.notify('<strong>该用对话已存在：</strong>', {type: 'error', delay:50});
+      }
+    }).fail(function() {
+      console.log('error');
+    })  
+  }
+
   fill() {
     if (!this.opts.pathId) {
       return;
@@ -77,7 +94,7 @@
 
   saveDialog() {
     var formData = {
-      id: this.id.value,
+      'dialog.id': this.id.value,
       'dialog.sceneName': this.sceneName.value,
       'dialog.name': this.name.value,
       asks: JSON.stringify(this.tags.asks.list),
@@ -88,7 +105,7 @@
   }
 
   save(data) {
-    var url = riot.config.apiPrefix + 'knowledge/dialog/' + (data.id ? 'update' : 'save');
+    var url = riot.config.apiPrefix + 'knowledge/dialog/' + (data['dialog.id'] ? 'update' : 'save');
     $.ajax({
       url: url,
       type: 'post',
@@ -103,6 +120,7 @@
       console.log('error');
     })
   }
+  
   
   cancel() {
     location.href = '#dialog';

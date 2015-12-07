@@ -1,0 +1,156 @@
+<chat>
+  <section class="content-header">
+    <h1>
+      &nbsp;
+     <!--  <small>可查所有用户列表</small> -->
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+      <li class="active">聊天</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="box box-success direct-chat direct-chat-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">您正在与耳朵进行交谈</h3>
+
+          <div class="box-tools pull-right">
+
+            <span data-toggle="tooltip" title="3 New Messages" class="badge bg-green">3</span>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Contacts" data-widget="chat-pane-toggle">
+              <i class="fa fa-comments"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+
+          </div>
+        </div>
+        <div class="box-body">
+          <div id="box" class="direct-chat-messages">
+            <div class="direct-chat-msg">
+              <div class="direct-chat-info clearfix">
+                <span class="direct-chat-name pull-left">耳朵</span>
+                <span class="direct-chat-timestamp pull-right">{new Date().format()}</span>
+              </div>
+              <img class="direct-chat-img" src="/assets/vendors/adminlte/img/er-duo-01.jpg" alt="Message User Image">
+              <div class="direct-chat-text">
+                你好，我是耳朵！
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <div class="input-group">
+            <input type="text" name="message" placeholder="输入交谈内容..." class="form-control" onkeypress={send}>
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-success btn-flat"  onclick={send}>发送</button>
+                </span>
+          </div>
+        </div>
+        <!-- /.box-footer-->
+      </div>
+  </section>
+
+  <script>
+    var _this = this;
+    this.user = riot.data.user;
+
+    Date.prototype.format = function(fmt) {
+      if(fmt==null){
+        fmt = "yyyy-MM-dd HH:mm:ss";
+      }
+
+      var o = {   
+        "M+" : this.getMonth()+1,                 //月份   
+        "d+" : this.getDate(),                    //日   
+        "h+" : this.getHours(),                   //小时   
+        "m+" : this.getMinutes(),                 //分   
+        "s+" : this.getSeconds(),                 //秒   
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+        "S"  : this.getMilliseconds()             //毫秒   
+      };   
+      if(/(y+)/.test(fmt))   
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));   
+      for(var k in o)   
+        if(new RegExp("("+ k +")").test(fmt))   
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
+      return fmt;   
+    };
+
+    var messageHTML='\
+      <div class="direct-chat-msg #dirction#">\
+        <div class="direct-chat-info clearfix">\
+          <span class="direct-chat-name pull-#name-dirction#">#nickName#</span>\
+          <span class="direct-chat-timestamp pull-#time-dirction#">#date#</span>\
+        </div>\
+        <img class="direct-chat-img" src="/assets/vendors/adminlte/img/#avatar#" >\
+        <div class="direct-chat-text">\
+          #message#\
+        </div>\
+      </div> \
+      ';
+
+    getHTMLMessage(type, message){
+      var nickName = '耳朵';
+      var dirction = 'left';
+      var timeDirction = 'right';
+      var avatar = 'er-duo-01.jpg';
+      var nameDirction = 'left';
+
+      if(type=='user'){
+        nickName = this.user.nickName;
+        dirction = 'right';
+        timeDirction = 'left';
+        nameDirction = 'right';
+        avatar = 'user2-160x160.jpg';
+      }
+
+      var msg = messageHTML.replace('#nickName#', nickName);
+      msg = msg.replace('#date#', new Date().format());
+      msg = msg.replace('#message#', message);
+      msg = msg.replace('#avatar#', avatar);
+      msg = msg.replace('#time-dirction#', timeDirction);
+      msg = msg.replace('#dirction#', dirction);
+      msg = msg.replace('#name-dirction#', nameDirction);
+      // console.log('message=' + msg);
+      return msg;
+    }
+
+    scrollWindow(){
+      var t = document.getElementById('box');
+      t.scrollTop = t.scrollHeight;
+      setTimeout('scrollWindow()', 800);
+    }
+
+    showMessage(type, htmlMsg){
+      $(".direct-chat-messages").append(this.getHTMLMessage(type, htmlMsg));
+      var t = document.getElementById('box');
+      t.scrollTop = t.scrollHeight + 140;
+    }
+
+    send(e) {
+      if (!this.message.value) {
+        return true;
+      }
+
+      if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+        this.showMessage('user', this.message.value);
+
+        $.ajax({
+          url: riot.config.apiPrefix + 'knowledge/dialog/ask/' + this.message.value,
+          type: 'post',
+          data: {}
+        }).done(function(data) {
+          _this.showMessage('erduo', data.result)
+        }).fail(function() {
+          console.log('ask error');
+        })
+
+        this.message.value = '';
+      }
+      return true;
+    }
+
+  </script>
+</chat>

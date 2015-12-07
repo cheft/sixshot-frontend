@@ -13,6 +13,9 @@
     <li class="header">功能菜单</li>
     <li class="active"><a href="#dialog"><i class="fa fa-envelope-o"></i> <span>对话列表</span></a></li>
     <li if={user.type=='admin'}><a href="#user"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
+    <li ><a href="#chat"><i class="fa fa-user"></i> <span>聊天</span></a></li>
+    <li if={user.type=='admin'}><a href="{riot.config.apiPrefix}knowledge/dialog/downloadGrammar"><i class="fa fa-user"></i> <span>导出语法</span></a></li>
+    <li if={user.type=='admin'}><a href="{riot.config.apiPrefix}knowledge/dialog/downloadKnowledges"><i class="fa fa-user"></i> <span>导出知识库</span></a></li>
   </ul>
 
   <script>

@@ -40,7 +40,7 @@
                   <span if={!item.audited} class="label label-warning">未采纳</span>
                 </td>
                 <td>
-                  <a if={user.type == 'admin' && !item.audited} href="#dialog-audit/{item.id}">采纳审核</a>
+                  <a if={user.type == 'admin' && !item.audited} href="#dialog-audit/{item.id}">审核</a>
                   <a if={!item.audited} href="javascript:;" onclick={del}>删除</a>
                 </td>
               </tr>

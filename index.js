@@ -17,6 +17,19 @@ var activeMenu = function(path) {
 };
 
 var mountSome = function(opts) {
+  console.log(opts);
+  if(opts.path=='chat'){
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/generateKnowledges',
+      type: 'post',
+      data: {}
+    }).done(function(data) {
+      console.log('知识库生成完毕');
+    }).fail(function() {
+      console.log('knowledge generate error');
+    })
+  }
+
   if(!riot.tags.profile) {
     riot.tags.profile = riot.mount('profile');
   }

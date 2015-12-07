@@ -41,7 +41,37 @@
   </div>
 
   <script>
+    var _this = this;
     this.list = [];
+    var text;
+    if(this.opts.type=='ask'){
+      text = '问题';
+    }else{
+      text = '答案';
+    }
+
+    addItem(){
+
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/' + this.opts.type + '/validate/' + this.newitem.value,
+        type: 'post',
+        data: {}
+      }).done(function(data) {
+        if(data.result=='true'){
+          console.log('问题可用');
+          //TODO 遍历 list 中已经存在的情况　
+          _this.list.push({content: _this.newitem.value});
+          _this.update();
+          _this.newitem.value = '';
+        }else{
+          _this.newitem.focus();
+
+          $.notify('<strong>该' + text + '已存在：</strong>', {type: 'error'});
+        }
+      }).fail(function() {
+        console.log('error');
+      })      
+    }
 
     add(e) {
       if (!this.newitem.value) {
@@ -49,9 +79,8 @@
       }
 
       if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
-        this.list.push({content: this.newitem.value});
-        this.update();
-        this.newitem.value = '';
+        this.addItem();
+
       }
       return true;
     }

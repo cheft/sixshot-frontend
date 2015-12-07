@@ -9,7 +9,7 @@
        -->
       <form method="post">
         <div class="form-group has-feedback">
-          <input type="text" name="nickName" class="form-control" placeholder="昵称">
+          <input type="text" name="nickName" class="form-control" placeholder="昵称" onblur={checkNickName}>
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
@@ -41,8 +41,17 @@
   <script>
   var _this = this;
 
+  checkNickName(){
+    if(this.nickName.value.trim()==''){
+      this.nickName.focus();
+      $.notify('<strong>请输入昵称：</strong>', {type: 'error'});
+    }
+  }
+
   validateUserExist(){
     if(this.userName.value==""){
+      this.userName.focus();
+      $.notify('<strong>请输入用户名：</strong>', {type: 'error'});
       return;
     }
 
@@ -56,8 +65,8 @@
         //do nothing
         console.log('用户名可以使用');
       }else{
-        // 提示用户已存在
-        console.log('用户已存在');
+        _this.userName.focus();
+        $.notify('<strong>该用户已存在：</strong>', {type: 'error'});
       }
     }).fail(function() {
       console.log('error');
@@ -65,9 +74,10 @@
   }
 
   confirmPassword(){
-    if(this.password!=this['confirm-password']){
-      // this['confirm-password'].focus();
-      //TODO  密码验证
+    // console.log('用户已存在,' + _this.userName);
+    if(this.password.value!=this['confirm-password'].value){
+      _this['confirm-password'].value = '';
+      $.notify('<strong>密码不一致：</strong>', {type: 'error'});
     }
   }
 

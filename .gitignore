@@ -1,3 +1,5 @@
 node_modules
 .DS_Store
 .coding-ide
+assets/js/index.js
+assets/js/login.js
