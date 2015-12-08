@@ -17,6 +17,8 @@
     <li ><a href="#chat"><i class="fa fa-wechat"></i> <span>与尔朵聊天</span></a></li>
     <li if={user.type=='admin'}><a href="{riot.config.apiPrefix}knowledge/dialog/downloadGrammar"><i class="fa  fa-download"></i> <span>导出语法</span></a></li>
     <li if={user.type=='admin'}><a href="{riot.config.apiPrefix}knowledge/dialog/downloadKnowledges"><i class="fa  fa-download"></i> <span>导出知识库</span></a></li>
+    <li if={user.type=='admin'}><a href="{riot.config.apiPrefix}knowledge/import/english/importt
+"><i class="fa  fa-download"></i> <span>导入英语</span></a></li>
   </ul>
 
   <script>
