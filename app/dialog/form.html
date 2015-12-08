@@ -11,6 +11,11 @@
     </ol>
   </section>
   <section class="content">
+    <div class="alert alert-success alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h4><i class="icon fa fa-info"></i> 提示!</h4>
+      目前我们塑造的“尔朵”，为年龄3-6岁的女孩，天真、童趣、有礼。各位亲在录入对话时，请结合此年龄段儿童的心理进行录入。
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
@@ -18,12 +23,9 @@
             <input name="id" type="hidden" value="{dialog.id}">
             <div class="box-body">
               <div class="form-group">
-                <label for="type">对话场景类型</label>
+                <label for="type">对话场景</label>
                 <select class="form-control select2" name="sceneName" style="width: 100%;">
-                  <option selected={dialog.sceneName == 'chat'} value="chat">聊天</option>
-                  <option selected={dialog.sceneName == 'poem'} selected value="poem">诗歌</option>
-                  <option selected={dialog.sceneName == 'arithmetic'} value="arithmetic">算数</option>
-                  <option selected={dialog.sceneName == 'english'} value="english">英语</option>
+                  <option selected value="chat">聊天</option>
                 </select>
               </div>
               <div class="form-group">
@@ -93,6 +95,11 @@
   }
 
   saveDialog() {
+    if(this.name.value.trim()==''){
+        this.name.focus();
+        $.notify('<strong>对话描述不能为空</strong>', {type: 'error', delay:50});
+        return;
+    }
     var formData = {
       'dialog.id': this.id.value,
       'dialog.sceneName': this.sceneName.value,

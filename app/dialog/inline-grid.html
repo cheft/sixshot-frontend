@@ -28,7 +28,7 @@
     </div>
     <div class="box-footer" if={!opts.readonly}>
       <div if={!editing} class="input-group">
-        <input type="text" class="form-control" name="newitem" placeholder="输入问题添加到列表" onkeypress={add}>
+        <input type="text" class="form-control" name="newitem" placeholder="输入{text}并添加到列表" onkeypress={add}>
         <div class="input-group-addon btn" onclick={add}>
           <i class="fa fa-plus"></i>
         </div>
@@ -49,6 +49,7 @@
     }else{
       text = '答案';
     }
+    this.text = text;
 
     addItem(){
 
@@ -74,7 +75,9 @@
     }
 
     add(e) {
-      if (!this.newitem.value) {
+      if (!this.newitem.value||this.newitem.value.trim()=='') {
+        this.newitem.focus();
+        $.notify('<strong>请输入内容！</strong>', {type: 'error', delay:50});
         return true;
       }
 
