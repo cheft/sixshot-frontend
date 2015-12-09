@@ -28,9 +28,14 @@
     <div class="box box-success direct-chat direct-chat-success">
         <div class="box-header with-border">
           <h3 class="box-title">您正在与尔朵进行交谈</h3>
+          <div class="box-tools pull-right">
+            <span class="badge bg-red btn btn-lg" style="cursor: pointer;" onclick={clearMessage}>清空聊天记录</span>
+          </div>
         </div>
         <div class="box-body" style="min-height: {riot.config.panelHeight - 100}px;">
-          <div id="box" class="direct-chat-messages" style="height: 100%;">
+          <!-- <div id="box" class="direct-chat-messages" style="height: {riot.config.panelHeight - 100}px; overflow: auto;"> -->
+
+           <div id="box" class="direct-chat-messages" style="height: 100%;">
             <div class="direct-chat-msg {type == 'user' ? 'right' : 'left'}" each={messages}>
               <div class="direct-chat-info clearfix">
                 <span class="direct-chat-name pull-{type == 'user' ? 'right' : 'left'}">
@@ -86,13 +91,21 @@
 
     var cache = sessionStorage.getItem('messages');
     this.messages = cache ? JSON.parse(cache) : [{type: 'system', content: '你好，我是尔朵！'}];
+    
     addMessage(type, content) {
       this.messages.push({
         type: type,
         content: content
       });
       sessionStorage.setItem('messages', JSON.stringify(this.messages));
-    }
+      // $('#box').scrollTop($('#box').scrollTop() + 120)
+    };
+
+    clearMessage() {
+      sessionStorage.setItem('messages', '');
+      this.messages = [];
+      this.update();
+    };
 
     send(e) {
       if (!this.message.value) {
