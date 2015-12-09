@@ -29,6 +29,7 @@
         <div class="box-header with-border">
           <h3 class="box-title">您正在与尔朵进行交谈</h3>
           <div class="box-tools pull-right">
+            <span class="badge bg-yellow btn btn-lg" style="cursor: pointer;" onclick={reloadKnowledge} title="刷新知识库后，您新增的对话信息將生效">刷新知识库</span>
             <span class="badge bg-red btn btn-lg" style="cursor: pointer;" onclick={clearMessage}>清空聊天记录</span>
           </div>
         </div>
@@ -125,6 +126,18 @@
         this.update();
       }
       return true;
+    }
+
+    reloadKnowledge(){
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/dialog/generateKnowledges',
+        type: 'post',
+        data: {}
+      }).done(function(data) {
+        $.notify('<strong>聊天信息重新加载成功，您新增加的聊天信息现在就生效了！</strong>', {type: 'success', delay:50});
+      }).fail(function() {
+        console.log('knowledge generate error');
+      })
     }
 
     /**
