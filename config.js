@@ -1,7 +1,8 @@
 module.exports = {
-  // apiPrefix: 'http://172.16.1.62:8080/sixshot-train/'
+  // apiPrefix: 'http://127.0.0.1:8080/sixshot-train/'
+  apiPrefix: 'http://ear-eye.com/'
   // apiPrefix: 'api/'
-  apiPrefix: '/'
+  // apiPrefix: '/'
 }
 
 $.ajaxSetup({
