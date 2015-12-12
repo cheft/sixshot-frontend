@@ -38,13 +38,13 @@
                 <td>{item.creatorName}</td>
                 <td>{item.createDate}</td>
                 <td>
-                  <span if={item.audited} class="label label-success">已采纳</span>
-                  <span if={!item.audited} class="label label-warning">未采纳</span>
+                  <span if={item.audited}>已采纳</span>
+                  <span if={!item.audited}>未采纳</span>
                 </td>
                 <td>
-                  <a if={user.type == 'admin' && !item.audited} href="#dialog-audit/{item.id}">审核</a>
-                  <a if={!item.audited} href="#poem-form/{item.id}">编辑</a>
-                  <a if={!item.audited} href="javascript:;" onclick={del}>删除</a>
+                  <a if={user.type == 'admin' && !item.audited} href="#dialog-audit/{item.id}" class="label label-info">审核</a>
+                  <a if={!item.audited} href="#poem-form/{item.id}" class="label label-warning">编辑</a>
+                  <a if={!item.audited} href="javascript:;" onclick={del} class="label label-danger">删除</a>
                 </td>
               </tr>
               <tr if={list.length == 0}>
