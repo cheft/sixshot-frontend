@@ -31,7 +31,7 @@
                 <th>操作</th>
               </tr>
               <tr each={item, i in list}>
-                <td style="text-align: center;">{i + 1}</td>
+                <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
                 <td><a href="#dialog-form/{item.id}">{item.name}</a></td>
                 <td>{sceneMap[item.sceneName]}</td>
                 <td>{item.creatorName}</td>

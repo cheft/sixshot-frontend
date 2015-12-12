@@ -1,0 +1,129 @@
+<settings>
+  <style scoped>
+    .touchable {
+      cursor: pointer;
+    }
+  </style>
+  <section class="content-header">
+    <h1>
+      系统设置
+      <small>管理员专用区</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> 系统</a></li>
+      <li class="active">系统设置</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="content info-box" style="min-height: {riot.config.panelHeight}px;">
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box bg-aqua touchable" onclick={rebuildKnowledge}>
+            <span class="info-box-icon"><i class="fa fa-repeat"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">touch me</span>
+              <span class="info-box-number">重建知识库</span>
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%"></div>
+              </div>
+              <span class="progress-description">
+              Rebuild Knowledge
+            </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box bg-green touchable" onclick={importEnglish}>
+            <span class="info-box-icon"><i class="fa fa-upload"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">touch me</span>
+              <span class="info-box-number">导入英语</span>
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%"></div>
+              </div>
+              <span class="progress-description">
+              Import English
+            </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box bg-yellow touchable" onclick={exportLanguage}>
+            <span class="info-box-icon"><i class="fa fa-download"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">touch me</span>
+              <span class="info-box-number">导出语法</span>
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%"></div>
+              </div>
+              <span class="progress-description">
+              Export Language
+            </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box bg-red touchable" onclick={exportKnowledge}>
+            <span class="info-box-icon"><i class="fa fa-cloud-download"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">touch me</span>
+              <span class="info-box-number">导出知识库</span>
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%"></div>
+              </div>
+              <span class="progress-description">
+              Export Knowledge
+            </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+    </div>
+  </section>
+
+  <script>
+    rebuildKnowledge() {
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/dialog/generateAndReloadKnowledges'
+      }).done(function(data) {
+        console.log(data);
+      })
+    }
+
+    importEnglish() {
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/import/english/importt'
+      }).done(function(data) {
+        console.log(data);
+      })
+    }
+
+    exportLanguage() {
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/dialog/downloadGrammar'
+      }).done(function(data) {
+        console.log(data);
+      })
+    }
+
+    exportKnowledge() {
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/dialog/downloadKnowledges'
+      }).done(function(data) {
+        console.log(data);
+      })
+    }
+  </script>
+</settings>

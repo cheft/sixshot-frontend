@@ -8,27 +8,26 @@
   </ul>
 
   <script>
-    this.pageNumber = 1;
-    this.totalPage = 1;
+    this.page = 1;
 
     first() {
-      this.pageNumber = 1;
-      this.parent.fetch(this.pageNumber);
+      this.page = 1;
+      this.parent.fetch(this.page);
     }
 
     prev() {
-      if (this.pageNumber > 1) this.pageNumber--;
-      this.parent.fetch(this.pageNumber);
+      if (this.page > 1) this.page--;
+      this.parent.fetch(this.page);
     }
 
     next() {
-      if (this.pageNumber < this.totalPage) this.pageNumber++;
-      this.parent.fetch(this.pageNumber);
+      if (this.page < this.totalPage) this.page++;
+      this.parent.fetch(this.page);
     }
 
     last() {
-      this.pageNumber = this.totalPage;
-      this.parent.fetch(this.pageNumber);
+      this.page = this.totalPage;
+      this.parent.fetch(this.page);
     }
   </script>
 </pagination>
