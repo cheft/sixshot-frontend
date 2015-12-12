@@ -17,6 +17,7 @@
             <div class="box-title">
               <a href="#dialog-form" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 增加</a>
             </div>
+            <pagination></pagination>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
@@ -65,12 +66,12 @@
       english: '英语'
     };
     this.on('mount', function() {
-      this.fetch();
+      this.fetch(1);
     });
 
-    fetch() {
+    fetch(pageNumber) {
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/list',
+        url: riot.config.apiPrefix + 'knowledge/dialog/list/' + pageNumber,
         type: 'get'
       }).done(function(data) {
         _this.update(data);
