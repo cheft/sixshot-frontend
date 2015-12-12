@@ -33,7 +33,7 @@
                 <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
                 <td>{item.userName}</td>
                 <td>{item.nickName}</td>
-                <td>{item.type}</td>
+                <td>{userMap[item.type]}</td>
                 <td>
                   <span if={item.audited} class="label label-success">已审核</span>
                   <span if={!item.audited} class="label label-warning">未审核</span>
@@ -51,6 +51,10 @@
 
   <script>
     var _this = this;
+    this.userMap = {
+      user: '普通用户',
+      admin: '管理员'
+    };
 
     this.on('mount', function() {
       this.fetch(1);
@@ -76,7 +80,7 @@
         if(data.result=='true'){
           console.log('审核成功');
           $.notify('<strong>审核成功！</strong>', {type: 'success'});
-          _this.fetch();
+          _this.fetch(_this.pageNumber);
         }else{
           $.notify('<strong>登录失败：</strong>', {type: 'error'});
         }

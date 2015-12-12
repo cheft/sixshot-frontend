@@ -1,0 +1,171 @@
+<poem-form>
+  <section class="content-header">
+    <h1>
+      诗歌
+      <small>编辑或查看诗歌</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+      <li><a href="#dialog">诗歌列表</a></li>
+      <li class="active">诗歌对话</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
+          <form role="form">
+            <input name="id" type="hidden" value="{poem.id}">
+            <input name="type" type="hidden" value="{poem.id}">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="type">诗歌名</label>
+                    <input type="text" class="form-control" name="name" value={poem.name} placeholder="对话描述">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="type">别名</label>
+                    <input type="text" class="form-control" name="alias" value={poem.alias} placeholder="对话描述">
+                  </div>
+                </div>
+              </div>
+              <div class="row" if={poem.type == 'ap'}>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="desc">作者</label>
+                    <input type="text" class="form-control" name="author" value={poem.author} placeholder="对话描述">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="desc">朝代</label>
+                    <input type="text" class="form-control" name="dynasty" value={poem.dynasty} placeholder="对话描述">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="desc">内容</label>
+                <textarea class="form-control" rows="5" name="content" placeholder="">{poem.content}</textarea>
+              </div>
+              <div class="form-group" if={poem.type == 'ap'}>
+                <label for="desc">大意</label>
+                <textarea class="form-control" rows="5" name="mainIdea" placeholder="">{poem.mainIdea}</textarea>
+              </div>
+            </div>
+            <div class="box-footer">
+              <button type="button" class="btn btn-primary" onclick={savePoem}>保存</button>
+              <button type="button" class="btn btn-cancel" onclick={cancel}>取消</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+  var _this = this;
+  this.poem = {};
+  this.on('mount', function() {
+    this.fill();
+    this.typ
+  }).on('update', function() {
+    if (!this.poem.type) {
+      this.poem.type = opts.pathId.split('-')[1];
+    }
+  });
+
+  validateName() {
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/poem/validate/' + this.name.value,
+      type: 'post',
+      data: {}
+    }).done(function(data) {
+      if (data.result == 'true') {
+        console.log('对话可用');
+      } else {
+        _this.name.focus();
+        $.notify('<strong>该用对话已存在：</strong>', {
+          type: 'error',
+          delay: 50
+        });
+      }
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+
+  fill() {
+    if (opts.pathId.split('-')[1]) {
+      return;
+    }
+
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/poem/edit/' + this.opts.pathId,
+      type: 'get',
+    }).done(function(data) {
+      _this.update({poem: data});
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+
+  savePoem() {
+    if (this.name.value.trim() == '') {
+      this.name.focus();
+      $.notify('<strong>诗歌名不能为空</strong>', {
+        type: 'error',
+        delay: 50
+      });
+      return;
+    }
+
+    if (this.name.value.trim() == '') {
+      this.name.focus();
+      $.notify('<strong>内容不能为空</strong>', {
+        type: 'error',
+        delay: 50
+      });
+      return;
+    }
+
+    var formData = {
+      'poem.type': this.poem.type,
+      'poem.id': this.id.value,
+      'poem.name': this.name.value,
+      'poem.alias': this.alias.value,
+      'poem.author': this.author.value,
+      'poem.dynasty': this.dynasty.value,
+      'poem.content': this.content.value,
+      'poem.mainIdea': this.mainIdea.value
+    }
+
+    this.save(formData);
+  }
+
+  save(data) {
+    var url = riot.config.apiPrefix + 'knowledge/poem/' + (data['poem.id'] ? 'update' : 'save');
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: data
+    }).done(function(data) {
+      console.log(data);
+      if (data.result == 'true') {
+        $.notify('<strong>保存成功！</strong>', {
+          type: 'success'
+        });
+        riot.route('poem');
+      }
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+
+
+  cancel() {
+    riot.route('poem');
+  }
+  </script>
+</poem-form>

@@ -1,4 +1,4 @@
-<dialog>
+<poem>
   <section class="content-header">
     <h1>
       对话列表
@@ -15,7 +15,8 @@
         <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
           <div class="box-header">
             <div class="box-title">
-              <a href="#dialog-form" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 增加</a>
+              <a href="#poem-form/type-ap" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 录入古诗</a>
+              <a href="#poem-form/type-nr" class="btn btn-sm btn-info"><i class="fa fa-plus"></i> 录入儿歌</a>
             </div>
             <pagination></pagination>
           </div>
@@ -23,17 +24,21 @@
             <table class="table table-hover">
               <tr>
                 <th style="text-align: center;">#</th>
-                <th>对话描述</th>
-                <th>场景</th>
-                <th>用户</th>
-                <th>创建时间</th>
+                <th>诗歌名（别名）</th>
+                <th>作者</th>
+                <th>类型</th>
+                <th>录入者</th>
+                <th>录入时间</th>
                 <th>是否采纳</th>
                 <th>操作</th>
               </tr>
               <tr each={item, i in list}>
                 <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
-                <td><a href="#dialog-form/{item.id}">{item.name}</a></td>
-                <td>{sceneMap[item.sceneName]}</td>
+                <td><a href="#poem-form/{item.id}">{item.name}
+                  <span if={item.alias && item.name != item.alias}>（{item.alias}）</span>
+                </a></td>
+                <td>{item.author}</td>
+                <td>{item.type == 'ap' ? item.dynasty + '古诗' : '儿歌'}</td>
                 <td>{item.creatorName}</td>
                 <td>{item.createDate}</td>
                 <td>
@@ -71,7 +76,7 @@
 
     fetch(pageNumber) {
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/list/' + pageNumber,
+        url: riot.config.apiPrefix + 'knowledge/poem/list/' + pageNumber,
         type: 'get'
       }).done(function(data) {
         _this.update(data);
@@ -83,7 +88,7 @@
       console.log(e);
       var id = e.item.item.id;
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/audit/' + id,
+        url: riot.config.apiPrefix + 'knowledge/poem/audit/' + id,
         type: 'get'
       }).done(function(data) {
         if(data.result=='true'){
@@ -100,7 +105,7 @@
     del(e) {
       var id = e.item.item.id;
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/delete/' + id,
+        url: riot.config.apiPrefix + 'knowledge/poem/delete/' + id,
         type: 'get'
       }).done(function(data) {
         if(data.result=='true'){
@@ -114,4 +119,4 @@
       })
     }
   </script>
-</dialog>
+</poem>
