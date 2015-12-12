@@ -17,7 +17,6 @@
             <div class="box-title">
               <a href="#poem-form/&{type}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 录入</a>
             </div>
-            <pagination></pagination>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
@@ -33,7 +32,7 @@
               </tr>
               <tr each={item, i in list}>
                 <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
-                <td><a href="#poem-form/{item.id}">{item.name}</a></td>
+                <td><a href="#view-poem/{item.id}">{item.name}</a></td>
                 <td if={type=='ancient-poetry'}>{item.author}</td>
                 <td if={type=='ancient-poetry'}>{item.dynasty}</td>
                 <td>{item.creatorName}</td>
@@ -44,6 +43,7 @@
                 </td>
                 <td>
                   <a if={user.type == 'admin' && !item.audited} href="#dialog-audit/{item.id}">审核</a>
+                  <a if={!item.audited} href="#poem-form/{item.id}">编辑</a>
                   <a if={!item.audited} href="javascript:;" onclick={del}>删除</a>
                 </td>
               </tr>
@@ -52,7 +52,9 @@
               </tr>
             </table>
           </div>
-
+          <div class="box-footer clearfix">
+            <pagination></pagination>
+          </div>
         </div>
       </div>
     </div>
@@ -74,7 +76,7 @@
     fetch(pageNumber) {
       $.ajax({
         url: riot.config.apiPrefix + 'knowledge/poem/list/' + pageNumber,
-        type: 'post',
+        type: 'get',
         data: {
           'poem.type': _this.type
         }

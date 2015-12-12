@@ -2,12 +2,12 @@
   <section class="content-header">
     <h1>
       问答
-      <small>编辑或查看问答</small>
+      <small>录入问答</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
       <li><a href="#dialog">问答列表</a></li>
-      <li class="active">编辑问答</li>
+      <li class="active">录入问答</li>
     </ol>
   </section>
   <section class="content">
@@ -23,13 +23,7 @@
             <input name="id" type="hidden" value="{dialog.id}">
             <div class="box-body">
               <div class="form-group">
-                <label for="type">问答场景</label>
-                <select class="form-control select2" name="sceneName" style="width: 100%;">
-                  <option selected value="chat">聊天</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="desc">问答描述</label>
+                <label>问答描述</label>
                 <input type="text" class="form-control" name="name" value={dialog.name} placeholder="问答描述" onblur={validateName}>
               </div>
               <div class="row">
@@ -53,11 +47,7 @@
   <script>
   var _this = this;
   this.on('mount', function() {
-    $('.select2').select2();
     this.fill();
-  })
-  .on('updated', function() {
-    $('.select2').select2();
   });
 
   validateName(){
@@ -113,8 +103,9 @@
 
     var formData = {
       'dialog.id': this.id.value,
-      'dialog.sceneName': this.sceneName.value,
+      'dialog.sceneName': 'chat',
       'dialog.name': this.name.value,
+      'dialog.audited': false,
       asks: JSON.stringify(this.tags.asks.list),
       answers: JSON.stringify(this.tags.answers.list)
     }
@@ -141,7 +132,7 @@
   
   
   cancel() {
-    location.href = '#dialog';
+    riot.route('dialog');
   }
   </script>
 </dialog-form>

@@ -1,13 +1,13 @@
-<poem-form>
+<view-poem>
   <section class="content-header">
     <h1>
       {riot.data.dictObj[poem.type]}
-      <small>编辑{riot.data.dictObj[poem.type]}</small>
+      <small>查看{riot.data.dictObj[poem.type]}</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
       <li><a href="#poem">诗歌列表</a></li>
-      <li class="active">录入{riot.data.dictObj[poem.type]}</li>
+      <li class="active">查看{riot.data.dictObj[poem.type]}</li>
     </ol>
   </section>
   <section class="content">
@@ -22,41 +22,41 @@
                 <div class="col-md-{(poem.type=='ancient-poetry' || poem.type=='nursery-rhymes') ? 6 : 12}">
                   <div class="form-group">
                     <label>{riot.data.dictObj[poem.type]}名</label>
-                    <input type="text" class="form-control" name="name" value={poem.name} placeholder="">
+                    <div class="form-control">{poem.name}</div>
                   </div>
                 </div>
                 <div class="col-md-6" if={poem.type=='ancient-poetry' || poem.type=='nursery-rhymes'}>
                   <div class="form-group">
-                    <label>别名</label>
-                    <input type="text" class="form-control" name="alias" value={poem.alias} placeholder="">
+                    <label for="type">别名</label>
+                    <div class="form-control">{poem.alias}</div>
                   </div>
                 </div>
               </div>
               <div class="row" if={poem.type=='ancient-poetry'}>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>作者</label>
-                    <input type="text" class="form-control" name="author" value={poem.author} placeholder="">
+                    <label for="desc">作者</label>
+                    <div class="form-control">{poem.author}</div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>朝代</label>
-                    <input type="text" class="form-control" name="dynasty" value={poem.dynasty} placeholder="">
+                    <label for="desc">朝代</label>
+                    <div class="form-control">{poem.dynasty}</div>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <label>内容</label>
-                <textarea class="form-control" rows="5" name="content" placeholder="">{poem.content}</textarea>
+                <label for="desc">内容</label>
+                <div class="form-control">{poem.content}</div>
               </div>
               <div class="form-group" if={poem.type=='ancient-poetry'}>
-                <label>大意</label>
-                <textarea class="form-control" rows="5" name="mainIdea" placeholder="">{poem.mainIdea}</textarea>
+                <label for="desc">大意</label>
+                <div class="form-control">{poem.mainIdea}</div>
               </div>
             </div>
             <div class="box-footer">
-              <button type="button" class="btn btn-primary" onclick={savePoem}>保存</button>
+              <button if={!poem.audited} type="button" class="btn btn-primary" onclick={toEdit}>进入编辑</button>
               <button type="button" class="btn btn-cancel" onclick={cancel}>取消</button>
             </div>
           </form>
@@ -90,62 +90,12 @@
     })
   }
 
-  savePoem() {
-    if (this.name.value.trim() == '') {
-      this.name.focus();
-      $.notify('<strong>诗歌名不能为空</strong>', {
-        type: 'error',
-        delay: 50
-      });
-      return;
-    }
-
-    if (this.name.value.trim() == '') {
-      this.name.focus();
-      $.notify('<strong>内容不能为空</strong>', {
-        type: 'error',
-        delay: 50
-      });
-      return;
-    }
-
-    var formData = {
-      'poem.type': this.type.value,
-      'poem.id': this.id.value,
-      'poem.name': this.name.value,
-      'poem.alias': this.alias.value,
-      'poem.author': this.author.value,
-      'poem.dynasty': this.dynasty.value,
-      'poem.content': this.content.value,
-      'poem.mainIdea': this.mainIdea.value,
-      'poem.audited': false
-    }
-
-    this.save(formData);
+  toEdit() {
+    riot.route('poem-form/' + _this.poem.id);
   }
-
-  save(data) {
-    var url = riot.config.apiPrefix + 'knowledge/poem/' + (data['poem.id'] ? 'update' : 'save');
-    $.ajax({
-      url: url,
-      type: 'post',
-      data: data
-    }).done(function(data) {
-      console.log(data);
-      if (data.result == 'true') {
-        $.notify('<strong>保存成功！</strong>', {
-          type: 'success'
-        });
-        riot.route('poem/' + _this.poem.type);
-      }
-    }).fail(function() {
-      console.log('error');
-    })
-  }
-
 
   cancel() {
     riot.route('poem/' + _this.poem.type);
   }
   </script>
-</poem-form>
+</view-poem>

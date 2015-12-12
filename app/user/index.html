@@ -15,9 +15,6 @@
         <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
           <div class="box-header">
             <h3 class="box-title">&nbsp;</h3>
-            <div class="box-tools">
-              <pagination></pagination>
-            </div>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
@@ -35,14 +32,17 @@
                 <td>{item.nickName}</td>
                 <td>{userMap[item.type]}</td>
                 <td>
-                  <span if={item.audited} class="label label-success">已审核</span>
-                  <span if={!item.audited} class="label label-warning">未审核</span>
+                  <span if={item.audited}>已审核</span>
+                  <span if={!item.audited}>未审核</span>
                 </td>
                 <td>
-                  <a if={!item.audited} id={item.id} href='javascript:;' onclick={audit}>通过</a>
+                  <a if={!item.audited} href="javascript:;" onclick={audit} class="label label-success">通过</a>
                 </td>
               </tr>
             </table>
+          </div>
+          <div class="box-footer clearfix">
+            <pagination></pagination>
           </div>
         </div>
       </div>
@@ -71,10 +71,9 @@
       });
     }
 
-    audit(){
-      var id = event.target.id;
+    audit(e){
       $.ajax({
-        url: riot.config.apiPrefix + 'system/user/audit/' + id,
+        url: riot.config.apiPrefix + 'system/user/audit/' + e.item.item.id,
         type: 'get'
       }).done(function(data) {
         if(data.result=='true'){

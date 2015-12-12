@@ -12,7 +12,7 @@
           <tr>
             <th style="width: 10px">#</th>
             <th>内容</th>
-            <th if={!editing} style="width: 50px">操作</th>
+            <th if={!opts.readonly && !editing} style="width: 50px">操作</th>
           </tr>
           <tr each={l, i in list}>
             <td if={!editing}>{i + 1}</td>
@@ -21,7 +21,7 @@
               <span if={!editing}>{l.content}</span>
               <input if={editing} type="text" class="js-item form-control" value={l.content}>
             </td>
-            <td if={!editing} ><span class="btn badge bg-red" onclick={del}>删除</span></td>
+            <td if={!parent.opts.readonly && !editing} ><span class="btn badge bg-red" onclick={del}>删除</span></td>
           </tr>
         </tbody>
       </table>
@@ -75,13 +75,12 @@
     }
 
     add(e) {
-      if (!this.newitem.value||this.newitem.value.trim()=='') {
-        this.newitem.focus();
-        $.notify('<strong>请输入内容！</strong>', {type: 'error', delay:50});
-        return true;
-      }
-
       if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+        if (!this.newitem.value||this.newitem.value.trim()=='') {
+          this.newitem.focus();
+          $.notify('<strong>请输入内容！</strong>', {type: 'error', delay:50});
+          return true;
+        }
         this.addItem();
 
       }

@@ -18,10 +18,6 @@
             <input name="id" type="hidden" value="{dialog.id}">
             <div class="box-body">
               <div class="form-group">
-                <label for="type">问答场景类型</label>
-                <div class="form-control" style="border-color: #ffe;">{sceneMap[dialog.sceneName]}</div>
-              </div>
-              <div class="form-group">
                 <label for="desc">问答描述</label>
                 <div class="form-control" style="border-color: #ffe;">{dialog.name}</div>
               </div>
@@ -57,13 +53,6 @@
     </div>
   </section>
   <script>
-  this.sceneMap = {
-    chat: '聊天',
-    poem: '诗歌',
-    arithmetic: '算数',
-    english: '英语'
-  };
-
   var _this = this;
   this.on('mount', function() {
     this.fill();
@@ -119,10 +108,11 @@
   reject(data) {
     var data = this.getFormData();
     // :TODO 不采纳
+    riot.route('dialog');
   }
   
   cancel() {
-    location.href = '#dialog';
+    riot.route('dialog');
   }
   </script>
 </dialog-audit>

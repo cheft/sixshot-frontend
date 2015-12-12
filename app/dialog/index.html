@@ -17,14 +17,20 @@
             <div class="box-title">
               <a href="#dialog-form" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 录入</a>
             </div>
-            <pagination></pagination>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search}>
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" onclick={search}><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
               <tr>
                 <th style="text-align: center;">#</th>
                 <th>问答描述</th>
-                <th>场景</th>
                 <th>用户</th>
                 <th>创建时间</th>
                 <th>是否采纳</th>
@@ -32,86 +38,88 @@
               </tr>
               <tr each={item, i in list}>
                 <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
-                <td><a href="#dialog-form/{item.id}">{item.name}</a></td>
-                <td>{sceneMap[item.sceneName]}</td>
+                <td><a href="#view-dialog/{item.id}">{item.name}</a></td>
                 <td>{item.creatorName}</td>
                 <td>{item.createDate}</td>
                 <td>
-                  <span if={item.audited} class="label label-success">已采纳</span>
-                  <span if={!item.audited} class="label label-warning">未采纳</span>
+                  <span if={item.audited}>已采纳</span>
+                  <span if={!item.audited}>未采纳</span>
                 </td>
                 <td>
-                  <a if={user.type == 'admin' && !item.audited} href="#dialog-audit/{item.id}">审核</a>
-                  <a if={!item.audited} href="javascript:;" onclick={del}>删除</a>
+                  <a if={user.type=='admin' && !item.audited} href="#dialog-audit/{item.id}" class="label label-info">审核</a>
+                  <a if={!item.audited} href="#dialog-form/{item.id}" class="label label-warning">编辑</a>
+                  <a if={!item.audited} href="javascript:;" onclick={del} class="label label-danger">删除</a>
                 </td>
               </tr>
-              <tr if={list.length == 0}>
-                <td colspan="7" style="text-align: center;">快来增加你的第一个问题吧！</td>
+              <tr if={list.length==0 }>
+                <td colspan="6" style="text-align: center;">快来增加你的第一个问题吧！</td>
               </tr>
             </table>
           </div>
-
+          <div class="box-footer clearfix">
+            <pagination></pagination>
+          </div>
         </div>
       </div>
     </div>
   </section>
-
   <script>
-    this.user = riot.data.user;
-    var _this = this;
-    this.sceneMap = {
-      chat: '聊天',
-      poem: '诗歌',
-      arithmetic: '算数',
-      english: '英语'
-    };
-    this.on('mount', function() {
-      this.fetch(1);
-    });
+  this.user = riot.data.user;
+  var _this = this;
+  this.on('mount', function() {
+    this.fetch(1);
+  });
 
-    fetch(pageNumber) {
-      $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/list/' + pageNumber,
-        type: 'get'
-      }).done(function(data) {
-        _this.update(data);
-      }).fail(function() {
-      })
-    }
+  fetch(pageNumber, params) {
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/list/' + pageNumber,
+      type: 'get',
+      data: params
+    }).done(function(data) {
+      _this.update(data);
+    }).fail(function() {})
+  }
 
-    audit(e){
-      console.log(e);
-      var id = e.item.item.id;
-      $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/audit/' + id,
-        type: 'get'
-      }).done(function(data) {
-        if(data.result=='true'){
-          console.log('审核成功');
-          _this.fetch(_this.pageNumber);
-        }else{
-          console.log('审核失败');
-        }
-      }).fail(function() {
-        console.log('error');
-      })
-    }
+  audit(e) {
+    console.log(e);
+    var id = e.item.item.id;
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/audit/' + id,
+      type: 'get'
+    }).done(function(data) {
+      if (data.result == 'true') {
+        console.log('审核成功');
+        _this.fetch(_this.pageNumber);
+      } else {
+        console.log('审核失败');
+      }
+    }).fail(function() {
+      console.log('error');
+    })
+  }
 
-    del(e) {
-      var id = e.item.item.id;
-      $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/dialog/delete/' + id,
-        type: 'get'
-      }).done(function(data) {
-        if(data.result=='true'){
-          console.log('删除成功');
-          _this.fetch(_this.pageNumber);
-        }else{
-          console.log('删除失败');
-        }
-      }).fail(function() {
-        console.log('error');
-      })
+  del(e) {
+    var id = e.item.item.id;
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/dialog/delete/' + id,
+      type: 'get'
+    }).done(function(data) {
+      if (data.result == 'true') {
+        console.log('删除成功');
+        _this.fetch(_this.pageNumber);
+      } else {
+        console.log('删除失败');
+      }
+    }).fail(function() {
+      console.log('error');
+    })
+  }
+
+  search(e) {
+    if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+      this.fetch(1, {'dialog.audited': this.keyword.value});
     }
+    return true;
+  }
   </script>
 </dialog>
