@@ -47,8 +47,8 @@
                 </td>
                 <td>
                   <a if={user.type=='admin' && !item.audited} href="#dialog-audit/{item.id}" class="label label-info">审核</a>
-                  <a if={!item.audited} href="#dialog-form/{item.id}" class="label label-warning">编辑</a>
-                  <a if={!item.audited} href="javascript:;" onclick={del} class="label label-danger">删除</a>
+                  <a if={user.type=='admin' || !item.audited} href="#dialog-form/{item.id}" class="label label-warning">编辑</a>
+                  <a if={user.type=='admin' || !item.audited} href="javascript:;" onclick={del} class="label label-danger">删除</a>
                 </td>
               </tr>
               <tr if={list.length==0 }>

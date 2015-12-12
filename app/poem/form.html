@@ -50,7 +50,7 @@
                 <label>内容</label>
                 <textarea class="form-control" rows="5" name="content" placeholder="">{poem.content}</textarea>
               </div>
-              <div class="form-group" if={poem.type=='ancient-poetry'}>
+              <div class="form-group" if={poem.type=='ancient-poetry' || poem.type=='brain-teaser'}>
                 <label>大意</label>
                 <textarea class="form-control" rows="5" name="mainIdea" placeholder="">{poem.mainIdea}</textarea>
               </div>

@@ -30,7 +30,7 @@
               </div>
             </div>
             <div class="box-footer">
-              <button if={!dialog.audited} type="button" class="btn btn-primary" onclick={toEdit}>进入编辑</button>
+              <button if={user.type=='admin' || !dialog.audited} type="button" class="btn btn-primary" onclick={toEdit}>进入编辑</button>
               <button type="button" class="btn btn-cancel" onclick={cancel}>返回</button>
             </div>
           </form>
@@ -40,6 +40,7 @@
   </section>
   <script>
   var _this = this;
+  this.user = riot.data.user;
   this.on('mount', function() {
     this.fill();
   });

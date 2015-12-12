@@ -50,13 +50,13 @@
                 <label for="desc">内容</label>
                 <div class="form-control">{poem.content}</div>
               </div>
-              <div class="form-group" if={poem.type=='ancient-poetry'}>
+              <div class="form-group" if={poem.type=='ancient-poetry' || poem.type=='brain-teaser'}>
                 <label for="desc">大意</label>
                 <div class="form-control">{poem.mainIdea}</div>
               </div>
             </div>
             <div class="box-footer">
-              <button if={!poem.audited} type="button" class="btn btn-primary" onclick={toEdit}>进入编辑</button>
+              <button if={user.type=='admin' || !poem.audited} type="button" class="btn btn-primary" onclick={toEdit}>进入编辑</button>
               <button type="button" class="btn btn-cancel" onclick={cancel}>取消</button>
             </div>
           </form>
@@ -66,6 +66,7 @@
   </section>
   <script>
   var _this = this;
+  this.user = riot.data.user;
   this.poem = {};
   this.on('mount', function() {
     this.fill();
