@@ -81,17 +81,16 @@
   }
 
   audit(e) {
-    console.log(e);
     var id = e.item.item.id;
     $.ajax({
       url: riot.config.apiPrefix + 'knowledge/dialog/audit/' + id,
       type: 'get'
     }).done(function(data) {
-      if (data.result == 'true') {
-        console.log('审核成功');
+      if(data.result=='true'){
+        $.notify('<strong>审核成功！</strong>', {type: 'success'});
         _this.fetch(_this.pageNumber);
-      } else {
-        console.log('审核失败');
+      }else{
+        $.notify('<strong>审核失败!</strong>', {type: 'error'});
       }
     }).fail(function() {
       console.log('error');
@@ -104,11 +103,11 @@
       url: riot.config.apiPrefix + 'knowledge/dialog/delete/' + id,
       type: 'get'
     }).done(function(data) {
-      if (data.result == 'true') {
-        console.log('删除成功');
+      if(data.result=='true'){
+        $.notify('<strong>删除成功</strong>', {type: 'success'});
         _this.fetch(_this.pageNumber);
-      } else {
-        console.log('删除失败');
+      }else{
+        $.notify('<strong>删除失败!</strong>', {type: 'error'});
       }
     }).fail(function() {
       console.log('error');

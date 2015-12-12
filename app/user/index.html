@@ -36,7 +36,7 @@
                   <span if={!item.audited}>未审核</span>
                 </td>
                 <td>
-                  <a if={!item.audited} href="javascript:;" onclick={audit} class="label label-success">通过</a>
+                  <a if={!item.audited} href="javascript:;" onclick={audit} class="label label-success">审核通过</a>
                 </td>
               </tr>
             </table>
@@ -81,7 +81,7 @@
           $.notify('<strong>审核成功！</strong>', {type: 'success'});
           _this.fetch(_this.pageNumber);
         }else{
-          $.notify('<strong>登录失败：</strong>', {type: 'error'});
+          $.notify('<strong>审核失败!</strong>', {type: 'error'});
         }
       }).fail(function() {
         console.log('error');

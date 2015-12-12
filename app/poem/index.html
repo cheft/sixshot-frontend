@@ -42,7 +42,7 @@
                   <span if={!item.audited}>未采纳</span>
                 </td>
                 <td>
-                  <a if={user.type == 'admin' && !item.audited} href="#dialog-audit/{item.id}" class="label label-info">审核</a>
+                  <a if={user.type == 'admin' && !item.audited} href="javascript:;" class="label label-info" onclick={audit}>审核通过</a>
                   <a if={user.type=='admin' || !item.audited} href="#poem-form/{item.id}" class="label label-warning">编辑</a>
                   <a if={user.type=='admin' || !item.audited} href="javascript:;" onclick={del} class="label label-danger">删除</a>
                 </td>
@@ -87,17 +87,25 @@
     }
 
     audit(e){
-      console.log(e);
-      var id = e.item.item.id;
+      var obj = e.item.item;
+      delete obj.creatorName;
+      delete obj.auditorName;
+      for(var p in obj) {
+        obj['poem.' + p] = obj[p];
+        delete obj[p];
+      }
+      obj['poem.audited'] = true;
+
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/poem/audit/' + id,
-        type: 'get'
+        url: riot.config.apiPrefix + 'knowledge/poem/audit/' + obj['poem.id'],
+        type: 'post',
+        data: obj
       }).done(function(data) {
         if(data.result=='true'){
-          console.log('审核成功');
+          $.notify('<strong>审核成功！</strong>', {type: 'success'});
           _this.fetch(_this.pageNumber);
         }else{
-          console.log('审核失败');
+          $.notify('<strong>审核失败!</strong>', {type: 'error'});
         }
       }).fail(function() {
         console.log('error');
@@ -111,10 +119,10 @@
         type: 'get'
       }).done(function(data) {
         if(data.result=='true'){
-          console.log('删除成功');
+          $.notify('<strong>删除成功</strong>', {type: 'success'});
           _this.fetch(_this.pageNumber);
         }else{
-          console.log('删除失败');
+          $.notify('<strong>删除失败!</strong>', {type: 'error'});
         }
       }).fail(function() {
         console.log('error');

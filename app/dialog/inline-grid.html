@@ -44,7 +44,7 @@
     var _this = this;
     this.list = [];
     var text;
-    if(this.opts.type=='ask'){
+    if(this.opts.type == 'ask'){
       text = '问题';
     }else{
       text = '答案';
@@ -52,9 +52,8 @@
     this.text = text;
 
     addItem(){
-
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/' + this.opts.type + '/validate/' + this.newitem.value,
+        url: riot.config.apiPrefix + 'knowledge/' + _this.opts.type + '/validate/' + _this.newitem.value,
         type: 'post',
         data: {}
       }).done(function(data) {
