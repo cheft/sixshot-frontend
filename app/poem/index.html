@@ -1,12 +1,12 @@
 <poem>
   <section class="content-header">
     <h1>
-      对话列表
-      <small>可查看您录入的所有对话列表</small>
+      {riot.data.dictObj[type]}列表
+      <small>可查看您录入的所有{riot.data.dictObj[type]}列表</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
-      <li class="active">对话列表</li>
+      <li class="active">{riot.data.dictObj[type]}列表</li>
     </ol>
   </section>
   <section class="content">
@@ -15,8 +15,7 @@
         <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
           <div class="box-header">
             <div class="box-title">
-              <a href="#poem-form/type-ap" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 录入古诗</a>
-              <a href="#poem-form/type-nr" class="btn btn-sm btn-info"><i class="fa fa-plus"></i> 录入儿歌</a>
+              <a href="#poem-form/&{type}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 录入</a>
             </div>
             <pagination></pagination>
           </div>
@@ -24,9 +23,9 @@
             <table class="table table-hover">
               <tr>
                 <th style="text-align: center;">#</th>
-                <th>诗歌名（别名）</th>
-                <th>作者</th>
-                <th>类型</th>
+                <th>{riot.data.dictObj[type]}名</th>
+                <th if={type=='ancient-poetry'}>作者</th>
+                <th if={type=='ancient-poetry'}>朝代</th>
                 <th>录入者</th>
                 <th>录入时间</th>
                 <th>是否采纳</th>
@@ -34,11 +33,9 @@
               </tr>
               <tr each={item, i in list}>
                 <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
-                <td><a href="#poem-form/{item.id}">{item.name}
-                  <span if={item.alias && item.name != item.alias}>（{item.alias}）</span>
-                </a></td>
-                <td>{item.author}</td>
-                <td>{item.type == 'ap' ? item.dynasty + '古诗' : '儿歌'}</td>
+                <td><a href="#poem-form/{item.id}">{item.name}</a></td>
+                <td if={type=='ancient-poetry'}>{item.author}</td>
+                <td if={type=='ancient-poetry'}>{item.dynasty}</td>
                 <td>{item.creatorName}</td>
                 <td>{item.createDate}</td>
                 <td>
@@ -51,7 +48,7 @@
                 </td>
               </tr>
               <tr if={list.length == 0}>
-                <td colspan="7" style="text-align: center;">快来增加你的第一个问题吧！</td>
+                <td colspan="8" style="text-align: center;">快来增加你的第一个{riot.data.dictObj[type]}吧！</td>
               </tr>
             </table>
           </div>
@@ -64,20 +61,23 @@
   <script>
     this.user = riot.data.user;
     var _this = this;
-    this.sceneMap = {
-      chat: '聊天',
-      poem: '诗歌',
-      arithmetic: '算数',
-      english: '英语'
-    };
+
     this.on('mount', function() {
       this.fetch(1);
+    }).on('update', function() {
+      if (!this.type) {
+        this.type = this.opts.pathId;
+        console.log(this.type);
+      }
     });
 
     fetch(pageNumber) {
       $.ajax({
         url: riot.config.apiPrefix + 'knowledge/poem/list/' + pageNumber,
-        type: 'get'
+        type: 'post',
+        data: {
+          'poem.type': _this.type
+        }
       }).done(function(data) {
         _this.update(data);
       }).fail(function() {

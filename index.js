@@ -5,10 +5,15 @@ riot.tags = {};
 riot.data = {};
 var HOMEPAGE = 'chat';
 
-var activeMenu = function(path) {
+var activeMenu = function(path, pathId) {
   if(path === '/') {
     path =  HOMEPAGE;
   }
+
+  if(path == 'poem') {
+    path = 'poem/' + pathId;
+  }
+
   var curMenu = $('.sidebar-menu a[href="#' + path + '"]');
   if(curMenu.length > 0) {
     $('.sidebar-menu li.active').removeClass('active');
@@ -37,7 +42,7 @@ var mountSome = function(opts) {
     riot.tags.navigator = riot.mount('navigator');
   }
   riot.tags.container = riot.mount('container', opts);
-  activeMenu(opts.path);
+  activeMenu(opts.path, opts.pathId);
 }
 
 var activate = function(toggleBtn) {
@@ -80,10 +85,11 @@ var activate = function(toggleBtn) {
 };
 
 $.ajax({
-  url: riot.config.apiPrefix + 'system/user/getLoginedUser',
+  url: riot.config.apiPrefix + 'system/user/getSettings',
   type: 'get'
 }).done(function(data) {
-  riot.data.user = data;
+  riot.data = data;
+  riot.data.dictObj = toObject(data.dictionaries);
   riot.config.panelHeight = screen.height - 240;
 
   riot.route('/', function(path) {
@@ -104,6 +110,14 @@ $.ajax({
 
   activate('.sidebar-toggle');
 });
+
+var toObject = function(array) {
+  var obj = {};
+  array.forEach(function(item) {
+    obj[item.key] = item.value;
+  });
+  return obj;
+}
 
 Date.prototype.format = function(fmt) {
   if(fmt==null){
