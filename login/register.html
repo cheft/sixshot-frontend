@@ -1,6 +1,6 @@
 <register>
   <div class="register-box">
-    <div class="register-logo" style="color: #367fa9;">
+    <div class="register-logo" style="color: rgba(0,0,0,.6);">
       <b>尔木科技用户注册</b>
     </div>
     <div class="register-box-body">
@@ -10,11 +10,11 @@
       <form method="post">
         <div class="form-group has-feedback">
           <input type="text" name="nickName" class="form-control" placeholder="昵称" onblur={checkNickName}>
-          <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          <span class="glyphicon glyphicon-thumbs-up form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
           <input type="text" name="userName" class="form-control" placeholder="账户名称（登录时使用）" onblur={validateUserExist}>
-          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
           <input type="password" name="password" class="form-control" placeholder="密码">
@@ -25,16 +25,15 @@
           <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
         </div>
         <div class="row">
-          <div class="col-xs-8">
-          </div>
-          <!-- /.col -->
-          <div class="col-xs-4">
-            <button type="button" class="btn btn-primary btn-block btn-flat" onclick={register}>注册</button>
+          <div class="col-xs-12">
+            <button type="button" class="btn btn-block btn-register" onclick={register}>注册</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
-      <a href="#" class="text-center">已有账号，去登录</a>
+      <div style="text-align: center;">
+        <a href="#" class="text-center">已有账号，去登录</a>
+      </div>
     </div>
     <!-- /.form-box -->
   </div>

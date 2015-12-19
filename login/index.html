@@ -1,6 +1,6 @@
 <login>
   <div class="login-box">
-    <div class="login-logo" style="color: #367fa9;">
+    <div class="login-logo" style="color: rgba(0,0,0,.6);">
       <b>尔木科技用户登录</b>
     </div>
     <!-- /.login-logo -->
@@ -11,23 +11,15 @@
       <form method="post">
         <div class="form-group has-feedback">
           <input type="text" name="userName"  class="form-control" placeholder="账户名称">
-          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
           <input type="password" name="password" class="form-control" placeholder="账户密码" onkeyup={login}>
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="row">
-          <div class="col-xs-8">
-            <div class="checkbox icheck" style="margin-left: 20px;">
-              <label>
-                <!-- <input type="checkbox"> 记住 -->
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-xs-4">
-            <button type="button" class="btn btn-primary btn-block btn-flat" onclick={login}>登录</button>
+          <div class="col-xs-12">
+            <button type="button" class="btn btn-block btn-login" onclick={login}>登录</button>
           </div>
           <!-- /.col -->
         </div>
@@ -35,7 +27,9 @@
       <!-- /.social-auth-links -->
       <!--<a href="#">I forgot my password</a>-->
       <!--<br>-->
-      <a href="#register" class="text-center">注册新账户</a>
+      <div style="text-align: center;">
+        <a href="#register" class="text-center">注册新账户</a>
+      </div>
     </div>
     <!-- /.login-box-body -->
   </div>
