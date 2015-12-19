@@ -21,8 +21,9 @@
               <div class="row">
                 <div class="col-md-{(poem.type=='ancient-poetry' || poem.type=='nursery-rhymes') ? 6 : 12}">
                   <div class="form-group">
-                    <label>{riot.data.dictObj[poem.type]}名</label>
-                    <input type="text" class="form-control" name="name" value={poem.name} placeholder="">
+                    <!-- <label>{riot.data.dictObj[poem.type]}名</label> -->
+                    <label>{this.poemNameTitle}</label>
+                    <input type="text" class="form-control" name="name" value={poem.name} placeholder="" onblur={validateName}>
                   </div>
                 </div>
                 <div class="col-md-6" if={poem.type=='ancient-poetry' || poem.type=='nursery-rhymes'}>
@@ -47,11 +48,11 @@
                 </div>
               </div>
               <div class="form-group">
-                <label>内容</label>
+                <label>{this.poemContentTitle}</label>
                 <textarea class="form-control" rows="5" name="content" placeholder="">{poem.content}</textarea>
               </div>
               <div class="form-group" if={poem.type=='ancient-poetry' || poem.type=='brain-teaser'}>
-                <label>大意</label>
+                <label>{this.poemMainIdeaTitle}</label>
                 <textarea class="form-control" rows="5" name="mainIdea" placeholder="">{poem.mainIdea}</textarea>
               </div>
             </div>
@@ -67,11 +68,40 @@
   <script>
   var _this = this;
   this.poem = {};
+
   this.on('mount', function() {
     this.fill();
   }).on('update', function() {
     if (!this.poem.type) {
       this.poem.type = this.opts.pathId.split('&')[1];
+    }
+    //TODO 提炼出单独的方法后不执行？
+    if(this.poem.type=='ancient-poetry'){
+      this.poemNameTitle = '古诗名';
+      this.poemContentTitle = '内容';
+      this.poemMainIdeaTitle = '大意';
+    }else if(this.poem.type=='nursery-rhymes'){
+      this.poemNameTitle = '儿歌名';
+      this.poemContentTitle = '内容';
+    }else if(this.poem.type=='idiom'){
+      this.poemNameTitle = '成语';
+      this.poemContentTitle = '解释';
+    }else if(this.poem.type=='english'){
+      this.poemNameTitle = '中文';
+      this.poemContentTitle = '英文';
+    }else if(this.poem.type=='saying'){
+      this.poemNameTitle = '谜面';
+      this.poemContentTitle = '谜底';
+    }else if(this.poem.type=='brain-teaser'){
+      this.poemNameTitle = '问题';
+      this.poemContentTitle = '答案';
+      this.poemMainIdeaTitle = '解释';
+    }else if(this.poem.type=='whys'){
+      this.poemNameTitle = '问题';
+      this.poemContentTitle = '答案';
+    }else{
+      this.poemContentTitle = '内容';
+      this.poemMainIdeaTitle = '大意';
     }
   });
 
@@ -90,23 +120,109 @@
     })
   }
 
-  savePoem() {
-    if (this.name.value.trim() == '') {
-      this.name.focus();
-      $.notify('<strong>诗歌名不能为空</strong>', {
-        type: 'error',
-        delay: 50
-      });
-      return;
-    }
+  validateName(){
+    $.ajax({
+      url: riot.config.apiPrefix + 'knowledge/poem/validate/' + this.name.value,
+      type: 'post',
+      data: {}
+    }).done(function(data) {
+      if(data.result=='true'){
+        console.log('问答可用');
+      }else{
+        _this.name.focus();
+        $.notify('<strong>该' + _this.poemNameTitle + '已存在：</strong>', {type: 'error', delay:50});
+      }
+    }).fail(function() {
+      console.log('error');
+    })  
+  }
 
-    if (this.name.value.trim() == '') {
-      this.name.focus();
-      $.notify('<strong>内容不能为空</strong>', {
-        type: 'error',
-        delay: 50
-      });
-      return;
+  savePoem() {
+
+    if(this.poem.type=='ancient-poetry'){
+      if (this.name.value.trim() == '') {
+        $.notify('<strong>诗歌名不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.author.value.trim() == '') {
+        $.notify('<strong>作者不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.dynasty.value.trim() == '') {
+        $.notify('<strong>朝代不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.content.value.trim() == '') {
+        $.notify('<strong>内容不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+
+      if (this.mainIdea.value.trim() == '') {
+        $.notify('<strong>大意不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+
+    }else if(this.poem.type=='nursery-rhymes'){
+      if (this.name.value.trim() == '') {
+        $.notify('<strong>儿歌名不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.content.value.trim() == '') {
+        $.notify('<strong>内容不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+
+    }else if(this.poem.type=='idiom'){
+      if (this.name.value.trim() == '') {
+        $.notify('<strong>成语不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.content.value.trim() == '') {
+        $.notify('<strong>解释不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+    }else if(this.poem.type=='english'){
+      if (this.name.value.trim() == '') {
+        $.notify('<strong>中文不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.content.value.trim() == '') {
+        $.notify('<strong>英文不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+    }else if(this.poem.type=='saying'){
+      if (this.name.value.trim() == '') {
+        $.notify('<strong>谜面不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.content.value.trim() == '') {
+        $.notify('<strong>谜底不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+    }else if(this.poem.type=='brain-teaser'){
+      if (this.name.value.trim() == '') {
+        $.notify('<strong>问题不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.content.value.trim() == '') {
+        $.notify('<strong>答案不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.mainIdea.value.trim() == '') {
+        $.notify('<strong>解释不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+    }else if(this.poem.type=='whys'){
+      if (this.name.value.trim() == '') {
+        $.notify('<strong>问题不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+      if (this.content.value.trim() == '') {
+        $.notify('<strong>答案不能为空</strong>', {type: 'error', delay: 50});
+        return;
+      }
+    }else{
+
     }
 
     var formData = {

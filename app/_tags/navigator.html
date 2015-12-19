@@ -11,9 +11,9 @@
   </div>
   <ul class="sidebar-menu">
     <li class="header">功能菜单</li>
-    <li class="active"><a href="#chat"><i class="fa fa-wechat"></i> <span>聊天</span></a></li>
-    <li><a href="#dialog"><i class="fa fa-android"></i> <span>问答管理</span></a></li>
-    <li each={riot.data.dictionaries}><a href="#poem/{key}"><i class="fa {icon ? icon : 'fa-ioxhost'}"></i> <span>{value}管理</span></a></li>
+    <li class="active"><a href="#chat"><i class="fa fa-wechat"></i> <span>与尔朵聊天</span></a></li>
+    <li><a href="#dialog"><i class="fa fa-android"></i> <span>问答</span></a></li>
+    <li each={riot.data.dictionaries}><a href="#poem/{key}"><i class="fa {icon ? icon : 'fa-ioxhost'}"></i> <span>{value}</span></a></li>
     <li if={user.type=='admin'}><a href="#user"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
     <li if={user.type=='admin'}><a href="#settings"><i class="fa fa-cog"></i><span>系统设置</span></a></li>
   <script>

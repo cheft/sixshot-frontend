@@ -36,16 +36,16 @@
         </div>
         <!-- /.col -->
         <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box bg-green touchable" onclick={importEnglish}>
+          <div class="info-box bg-green touchable" onclick={backup}>
             <span class="info-box-icon"><i class="fa fa-upload"></i></span>
             <div class="info-box-content">
               <span class="info-box-text">touch me</span>
-              <span class="info-box-number">导入英语</span>
+              <span class="info-box-number">备份数据库</span>
               <div class="progress">
                 <div class="progress-bar" style="width: 100%"></div>
               </div>
               <span class="progress-description">
-              Import English
+              Backup Database
             </span>
             </div>
             <!-- /.info-box-content -->
@@ -89,6 +89,22 @@
           <!-- /.info-box -->
         </div>
         <!-- /.col -->
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box bg-red touchable" onclick={generateGrammarAndKnowledges}>
+            <span class="info-box-icon"><i class="fa fa-cloud-download"></i></span>
+            <div class="info-box-content">
+              <!-- <span class="info-box-text">touch me</span> -->
+              <span class="info-box-number">生成语法&知识库</span>
+              <div class="progress">
+                <div class="progress-bar" style="width: 100%"></div>
+              </div>
+              <span class="progress-description">
+              Generate Grammar and Knowledge
+            </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -102,9 +118,9 @@
       })
     }
 
-    importEnglish() {
+    backup() {
       $.ajax({
-        url: riot.config.apiPrefix + 'knowledge/import/english/importt'
+        url: riot.config.apiPrefix + 'knowledge/dialog/backupDatabase'
       }).done(function(data) {
         console.log(data);
       })
@@ -125,5 +141,13 @@
         console.log(data);
       })
     }
+    generateGrammarAndKnowledges() {
+      $.ajax({
+        url: riot.config.apiPrefix + 'knowledge/dialog/generateGrammarAndKnowledges'
+      }).done(function(data) {
+        console.log(data);
+      })
+    }
+
   </script>
 </settings>

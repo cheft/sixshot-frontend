@@ -115,10 +115,16 @@
   }
 
   search(e) {
+    console.log('search...' + e.which);
+    console.log(e);
     if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
-      this.fetch(1, {'dialog.audited': this.keyword.value});
+      var data = {};
+      data['dialog.name'] = this.keyword.value;
+      data['search-all-record'] = false;//TODO 
+      this.fetch(1, data);
     }
     return true;
   }
+
   </script>
 </dialog>
