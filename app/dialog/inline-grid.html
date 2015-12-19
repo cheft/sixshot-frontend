@@ -12,7 +12,7 @@
           <tr>
             <th style="width: 10px">#</th>
             <th>内容</th>
-            <th if={!opts.readonly && !editing} style="width: 50px">操作</th>
+            <th if={!opts.readonly && !editing} style="width: 125px">操作</th>
           </tr>
           <tr each={l, i in list}>
             <td if={!editing}>{i + 1}</td>
@@ -21,7 +21,7 @@
               <span if={!editing}>{l.content}</span>
               <input if={editing} type="text" class="js-item form-control" value={l.content}>
             </td>
-            <td if={!parent.opts.readonly && !editing} ><span class="btn badge bg-red" onclick={del}>删除</span></td>
+            <td if={!parent.opts.readonly && !editing} ><span if={parent.opts.setting && user.type == 'admin'} class="btn badge bg-blue" onclick={config}>参数设置</span> <span class="btn badge bg-red" onclick={del}>删除</span></td>
           </tr>
         </tbody>
       </table>
@@ -41,6 +41,7 @@
   </div>
 
   <script>
+    this.user = riot.data.user;
     var _this = this;
     this.list = [];
     var text;
@@ -86,6 +87,10 @@
       return true;
     }
 
+    config(e) {
+      this.parent.tags.modal.trigger('open', e.item.l);
+    }
+
     del(e) {
       this.list.splice(e.item.i, 1);
       this.update();
@@ -99,7 +104,7 @@
     confirmEdit(e) {
       var items = this.root.querySelectorAll('.js-item');
       for (var i = 0; i < items.length; i++) {
-        this.list[i] = {content: items[i].value};
+        this.list[i].content = items[i].value;
       }
       this.stopEdit();
     }

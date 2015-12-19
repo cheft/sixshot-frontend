@@ -1,14 +1,72 @@
 <modal>
+  <style scoped>
+  .options .input-group-addon {
+    padding: 3px 6px;
+  }
+  
+  .options .form-control {
+    padding: 6px 6px;
+  }
+  </style>
   <div class="modal fade" id="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">请输入描述</h4>
+          <h4 class="modal-title">参数设置</h4>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <input type="text" class="form-control" name="content" placeholder="请输入描述"> </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="weights">权重值</label>
+                <input type="text" class="form-control" id="weights" placeholder="输入0-100的数字" style="ime-mode:disabled;" oninput={replaceNumber} onpropertychange={replaceNumber} onkeypress={pressNumber} value="{item.weights || '5'}">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>切换下一场景</label>
+                <select class="form-control select2" style="width: 100%;" id="willChangedSceneName">
+                  <option each={obj in sceneMap} value={obj.key} selected={item.willChangedSceneName == obj.key ? true : false}>{obj.value}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <label>请确认以下选项</label>
+          <div class="options row">
+            <div class="col-sm-3">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <input type="checkbox" id="analyzeWhenSelected" checked={item.analyzeWhenSelected}>
+                </span>
+                <label for="analyzeWhenSelected" class="form-control">选中时解析</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <input id="analyzeWithContext" type="checkbox" checked={item.analyzeWithContext}>
+                </span>
+                <label for="analyzeWithContext" class="form-control">上下文解析</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <input id="prefixable" type="checkbox" checked={item.prefixable}>
+                </span>
+                <label for="prefixable" class="form-control">支持前缀</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <input id="suffixable" type="checkbox" checked={item.suffixable}>
+                </span>
+                <label for="suffixable" class="form-control">支持后缀</label>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal" onclick={ok}>确定</button>
@@ -18,13 +76,49 @@
     </div>
   </div>
   <script>
-    this.on('open', function() {
-      this.content.value = '';
-      $(this.root).find('#modal').modal({});
-    });
+  this.sceneMap = riot.config.sceneMap;
+  this.sceneMap.unshift({
+    key: '',
+    value: '不切换场景'
+  });
 
-    ok() {
-      this.trigger('ok', this.content.value);
-    };
+  this.on('updated', function() {
+    $(this.root).find('select').select2();
+  })
+
+  this.on('open', function(item) {
+    $(this.root).find('#modal').modal({});
+    this.item = item;
+    this.update();
+  });
+
+  ok() {
+    this.item.weights = this.weights.value;
+    this.item.willChangedSceneName = this.willChangedSceneName.value;
+    this.item.analyzeWhenSelected = this.analyzeWhenSelected.checked ? 1 : 0;
+    this.item.analyzeWithContext = this.analyzeWithContext.checked ? 1 : 0;
+    this.item.prefixable = this.prefixable.checked ? 1 : 0;
+    this.item.suffixable = this.suffixable.checked ? 1 : 0;
+    this.trigger('ok');
+  };
+
+  pressNumber(e) {
+    var keyCode = e.keyCode;
+    if ((keyCode >= 48 && keyCode <= 57)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  replaceNumber(e) {
+    if (isNaN(e.target.value)) {
+      e.target.value = '';
+      $.notify('只能输入0-100的数字', {type: 'error'});
+    } else if(parseInt(e.target.value) < 0 || parseInt(e.target.value) > 100) {
+      e.target.value = '';
+      $.notify('只能输入0-100的数字', {type: 'error'});
+    }
+  };
   </script>
 </modal>
