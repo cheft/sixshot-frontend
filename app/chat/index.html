@@ -72,7 +72,9 @@
     if (cache) {
       this.messages = JSON.parse(cache);
     }else {
-      this.messages = [{type: 'system', content: '你好，我是尔朵！', date: (new Date()).format()}];
+      this.messages = [
+          {type: 'system', content: '你好，我是尔朵！你可以问问我会什么！', date: (new Date()).format()}
+        ];
     }
     
     addMessage(type, content) {

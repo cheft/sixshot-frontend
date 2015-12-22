@@ -25,7 +25,7 @@
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label>切换下一场景</label>
+                <label>切换场景</label>
                 <select class="form-control select2" style="width: 100%;" id="willChangedSceneName">
                   <option each={obj in sceneMap} value={obj.key} selected={item.willChangedSceneName == obj.key ? true : false}>{obj.value}</option>
                 </select>
@@ -77,6 +77,10 @@
   </div>
   <script>
   this.sceneMap = riot.config.sceneMap;
+  this.sceneMap.unshift({
+    key: 'previous-scene',
+    value: '上一场景'
+  });
   this.sceneMap.unshift({
     key: '',
     value: '不切换场景'
