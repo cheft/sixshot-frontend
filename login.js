@@ -21,3 +21,7 @@ window.onload = function() {
   riot.route.base('#')
   riot.route.start(true);
 }
+
+window.addEventListener('hashchange', function() {
+  riot.route.exec();
+});

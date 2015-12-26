@@ -1,12 +1,12 @@
-<user>
+<feedbacks>
   <section class="content-header">
     <h1>
-      用户列表
-      <small>可查所有用户记录</small>
+      反馈列表
+      <small>可查所有反馈记录</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 系统</a></li>
-      <li class="active">用户管理</li>
+      <li class="active">反馈管理</li>
     </ol>
   </section>
   <section class="content">
@@ -20,23 +20,18 @@
             <table class="table table-hover">
               <tr>
                 <th style="text-align: center;">#</th>
-                <th>账户</th>
-                <th>昵称</th>
-                <th>类型</th>
-                <th>是否审核</th>
+                <th>反馈人</th>
+                <th width="60%">反馈内容</th>
+                <th>反馈时间</th>
                 <th>操作</th>
               </tr>
               <tr each={item, i in list}>
                 <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
-                <td>{item.userName}</td>
-                <td>{item.nickName}</td>
-                <td>{userMap[item.type]}</td>
+                <td>{item.creatorName}</td>
+                <td>{item.content}</td>
+                <td>{item.createDate}</td>
                 <td>
-                  <span if={item.audited}>已审核</span>
-                  <span if={!item.audited}>未审核</span>
-                </td>
-                <td>
-                  <a if={!item.audited} href="javascript:;" onclick={audit} class="label label-success">审核通过</a>
+                  <a href="javascript:;" onclick={remove} class="label label-danger">删除</a>
                 </td>
               </tr>
             </table>
@@ -51,18 +46,13 @@
 
   <script>
     var _this = this;
-    this.userMap = {
-      user: '普通用户',
-      admin: '管理员'
-    };
-
     this.on('mount', function() {
       this.fetch(1);
     });
 
     fetch(pageNumber) {
       $.ajax({
-        url: riot.config.apiPrefix + 'system/user/list/' + pageNumber,
+        url: riot.config.apiPrefix + 'system/feedback/list/' + pageNumber,
         type: 'get'
       }).done(function(data) {
         _this.update(data);
@@ -71,21 +61,21 @@
       });
     }
 
-    audit(e){
+    remove(e) {
+      var id = e.item.item.id;
       $.ajax({
-        url: riot.config.apiPrefix + 'system/user/audit/' + e.item.item.id,
+        url: riot.config.apiPrefix + 'system/feedback/delete/' + id,
         type: 'get'
       }).done(function(data) {
         if(data.result=='true'){
-          console.log('审核成功');
-          $.notify('<strong>审核成功！</strong>', {type: 'success'});
+          $.notify('<strong>删除成功</strong>', {type: 'success'});
           _this.fetch(_this.pageNumber);
         }else{
-          $.notify('<strong>审核失败!</strong>', {type: 'error'});
+          $.notify('<strong>删除失败!</strong>', {type: 'error'});
         }
       }).fail(function() {
         console.log('error');
-      })
+      });
     }
   </script>
-</user>
+</feedbacks>

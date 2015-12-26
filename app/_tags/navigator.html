@@ -6,7 +6,7 @@
     <div class="pull-left info">
       <p>{user.nickName || user.username}&nbsp;</p>
       <!-- Status -->
-      <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+      <a href="javascript:;" onclick={openFeedback}><i class="fa fa-briefcase text-success"></i> 反馈建议</a>
     </div>
   </div>
   <ul class="sidebar-menu">
@@ -15,8 +15,12 @@
     <li><a href="#dialog"><i class="fa fa-android"></i> <span>问答</span></a></li>
     <li each={riot.data.dictionaries}><a href="#poem/{key}"><i class="fa {icon ? icon : 'fa-ioxhost'}"></i> <span>{value}</span></a></li>
     <li if={user.type=='admin'}><a href="#user"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
+    <li if={user.type=='admin'}><a href="#feedbacks"><i class="fa fa-briefcase"></i> <span>反馈管理</span></a></li>
     <li if={user.type=='admin'}><a href="#settings"><i class="fa fa-cog"></i><span>系统设置</span></a></li>
   <script>
     this.user = riot.data.user;
+    openFeedback() {
+      riot.tags.feedback[0].trigger('open');
+    }
   </script>
 </navigator>

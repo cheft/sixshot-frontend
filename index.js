@@ -22,7 +22,9 @@ var activeMenu = function(path, pathId) {
 };
 
 var mountSome = function(opts) {
-
+  if(!riot.tags.feedback) {
+    riot.tags.feedback = riot.mount('feedback');
+  }
   if(!riot.tags.profile) {
     riot.tags.profile = riot.mount('profile');
   }
@@ -128,3 +130,9 @@ Date.prototype.format = function(fmt) {
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
   return fmt;   
 };
+
+
+window.addEventListener('hashchange', function() {
+  riot.route.exec();
+});
+
