@@ -13,11 +13,28 @@
       margin-right: 10px;
     }
 
+    .scrollBtn {
+      position: fixed;
+      bottom: 5px;
+      right: 5px;
+      width: 40px;
+      height: 40px;
+      color: rgb(238, 238, 238);
+      line-height: 40px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 5px;
+      z-index: 99999;
+      opacity: 0.7;
+      background-color: rgb(34, 45, 50);
+    }
+
   </style>
   <section class="content-header">
     <h1>
       聊天
-      <small>问答、诗歌、算术、英语等</small>
+      <small>问答、诗歌、算术、英语等
+      </small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
@@ -62,9 +79,12 @@
         </div>
         <!-- /.box-footer-->
       </div>
+
+      <div class="scrollBtn" onclick={toggerScroll}><i id="scrollIcon" class="fa fa-chevron-down"></i></div>
   </section>
 
   <script>
+    NProgress.start();
     var _this = this;
     this.user = riot.data.user;
     var cache = sessionStorage.getItem('messages');
@@ -76,7 +96,18 @@
           {type: 'system', content: '你好，我是尔朵！你可以问问我会什么！', date: (new Date()).format()}
         ];
     }
-    
+    NProgress.done();
+
+    monitorIcon () {
+      if ($(document).scrollTop() > 0) {
+        $('#scrollIcon').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+      }else {
+        $('#scrollIcon').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+      }
+    }
+    $(window).on('scroll', _this.monitorIcon);
+    this.monitorIcon();
+
     addMessage(type, content) {
       var msg = {
         type: type,
@@ -86,7 +117,7 @@
 
       this.messages.push(msg);
       sessionStorage.setItem('messages', JSON.stringify(this.messages));
-      // $('#box').scrollTop($('#box').scrollTop() + 120)
+      $('html, body').animate({scrollTop: $('html').height()});
       return msg;
     };
 
@@ -126,6 +157,14 @@
       }).fail(function() {
         console.log('knowledge generate error');
       })
+    }
+
+    toggerScroll(e) {
+      if ($(document).scrollTop() > 0) {
+        $('html, body').animate({scrollTop: 0});
+      }else {
+        $('html, body').animate({scrollTop: $('html').height()});
+      }
     }
 
     /**

@@ -64,6 +64,7 @@
     </div>
   </section>
   <script>
+  NProgress.start();
   this.user = riot.data.user;
   var _this = this;
   this.on('mount', function() {
@@ -79,6 +80,7 @@
       data: params
     }).done(function(data) {
       _this.update(data);
+      NProgress.done();
     }).fail(function() {})
   }
 

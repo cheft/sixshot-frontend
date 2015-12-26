@@ -53,6 +53,7 @@
   </section>
 
   <script>
+    NProgress.start();
     var _this = this;
     this.on('mount', function() {
       var curPage = riot.data.feedbacksPage;
@@ -67,6 +68,7 @@
         data: d
       }).done(function(data) {
         _this.update(data);
+        NProgress.done();
       }).fail(function() {
         console.log('error');
       });

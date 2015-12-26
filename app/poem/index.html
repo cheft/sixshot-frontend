@@ -69,6 +69,7 @@
   </section>
 
   <script>
+    NProgress.start();
     this.user = riot.data.user;
     var _this = this;
 
@@ -89,6 +90,7 @@
         data: data
       }).done(function(data) {
         _this.update(data);
+        NProgress.done();
       }).fail(function() {
       })
     }
