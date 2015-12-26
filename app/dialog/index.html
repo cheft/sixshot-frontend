@@ -117,12 +117,10 @@
   }
 
   search(e) {
-    console.log('search...' + e.which);
-    console.log(e);
     if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
       var data = {};
       data['dialog.name'] = this.keyword.value;
-      data['search-all-record'] = false;//TODO 
+      this.tags.pagination.page = 1;
       this.fetch(1, data);
     }
     return true;

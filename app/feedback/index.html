@@ -15,6 +15,14 @@
         <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
           <div class="box-header">
             <h3 class="box-title">&nbsp;</h3>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search}>
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" onclick={search}><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
@@ -52,10 +60,11 @@
       this.fetch(curPage || 1);
     });
 
-    fetch(pageNumber) {
+    fetch(pageNumber, d) {
       $.ajax({
         url: riot.config.apiPrefix + 'system/feedback/list/' + pageNumber,
-        type: 'get'
+        type: 'get',
+        data: d
       }).done(function(data) {
         _this.update(data);
       }).fail(function() {
@@ -78,6 +87,16 @@
       }).fail(function() {
         console.log('error');
       });
+    }
+
+    search(e) {
+      if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+        var data = {};
+        data['feedback.content'] = this.keyword.value;
+        this.tags.pagination.page = 1;
+        this.fetch(1, data);
+      }
+      return true;
     }
   </script>
 </feedbacks>
