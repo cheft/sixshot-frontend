@@ -57,7 +57,9 @@
     };
 
     this.on('mount', function() {
-      this.fetch(1);
+      var curPage = riot.data.userPage;
+      this.tags.pagination.page = curPage || 1;
+      this.fetch(curPage || 1);
     });
 
     fetch(pageNumber) {

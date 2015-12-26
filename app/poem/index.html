@@ -65,7 +65,9 @@
     var _this = this;
 
     this.on('mount', function() {
-      this.fetch(1);
+      var curPage = riot.data['poem/' + this.type + 'Page'];
+      this.tags.pagination.page = curPage || 1;
+      this.fetch(curPage || 1);
     }).on('update', function() {
       if (!this.type) {
         this.type = this.opts.pathId;

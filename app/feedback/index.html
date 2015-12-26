@@ -47,7 +47,9 @@
   <script>
     var _this = this;
     this.on('mount', function() {
-      this.fetch(1);
+      var curPage = riot.data.feedbacksPage;
+      this.tags.pagination.page = curPage || 1;
+      this.fetch(curPage || 1);
     });
 
     fetch(pageNumber) {
