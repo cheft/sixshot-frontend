@@ -2,7 +2,7 @@
   <section class="content-header">
     <h1>
       问答列表
-      <small>可查看您录入的所有问答列表</small>
+      <small>可查看您录入的所有问答记录</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
@@ -64,10 +64,13 @@
     </div>
   </section>
   <script>
+  NProgress.start();
   this.user = riot.data.user;
   var _this = this;
   this.on('mount', function() {
-    this.fetch(1);
+    var curPage = riot.data.dialogPage;
+    this.tags.pagination.page = curPage || 1;
+    this.fetch(curPage || 1);
   });
 
   fetch(pageNumber, params) {
@@ -77,6 +80,7 @@
       data: params
     }).done(function(data) {
       _this.update(data);
+      NProgress.done();
     }).fail(function() {})
   }
 
@@ -115,12 +119,10 @@
   }
 
   search(e) {
-    console.log('search...' + e.which);
-    console.log(e);
     if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
       var data = {};
       data['dialog.name'] = this.keyword.value;
-      data['search-all-record'] = false;//TODO 
+      this.tags.pagination.page = 1;
       this.fetch(1, data);
     }
     return true;

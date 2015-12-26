@@ -17,6 +17,14 @@
             <div class="box-title">
               <a href="#poem-form/&{type}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> 录入</a>
             </div>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search}>
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" onclick={search}><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="box-body table-responsive no-padding">
             <table class="table table-hover">
@@ -61,27 +69,28 @@
   </section>
 
   <script>
+    NProgress.start();
     this.user = riot.data.user;
     var _this = this;
 
     this.on('mount', function() {
-      this.fetch(1);
+      var curPage = riot.data['poem/' + this.type + 'Page'];
+      this.tags.pagination.page = curPage || 1;
+      this.fetch(curPage || 1, {'poem.type': this.type});
     }).on('update', function() {
       if (!this.type) {
         this.type = this.opts.pathId;
-        console.log(this.type);
       }
     });
 
-    fetch(pageNumber) {
+    fetch(pageNumber, data) {
       $.ajax({
         url: riot.config.apiPrefix + 'knowledge/poem/list/' + pageNumber,
         type: 'get',
-        data: {
-          'poem.type': _this.type
-        }
+        data: data
       }).done(function(data) {
         _this.update(data);
+        NProgress.done();
       }).fail(function() {
       })
     }
@@ -103,7 +112,7 @@
       }).done(function(data) {
         if(data.result=='true'){
           $.notify('<strong>审核成功！</strong>', {type: 'success'});
-          _this.fetch(_this.pageNumber);
+          _this.fetch(_this.pageNumber, {'poem.type': _this.type});
         }else{
           $.notify('<strong>审核失败!</strong>', {type: 'error'});
         }
@@ -120,13 +129,25 @@
       }).done(function(data) {
         if(data.result=='true'){
           $.notify('<strong>删除成功</strong>', {type: 'success'});
-          _this.fetch(_this.pageNumber);
+          _this.fetch(_this.pageNumber, {'poem.type': _this.type});
         }else{
           $.notify('<strong>删除失败!</strong>', {type: 'error'});
         }
       }).fail(function() {
         console.log('error');
       })
+    }
+
+    search(e) {
+      if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+        var data = {
+          'poem.type': this.type,
+          'poem.name': this.keyword.value
+        };
+        this.tags.pagination.page = 1;
+        this.fetch(1, data);
+      }
+      return true;
     }
   </script>
 </poem>

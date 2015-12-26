@@ -9,25 +9,30 @@
 
   <script>
     this.page = 1;
+    var path = location.hash.replace('#', '');
 
     first() {
       this.page = 1;
       this.parent.fetch(this.page);
+      riot.data[path + 'Page'] = this.page;
     }
 
     prev() {
       if (this.page > 1) this.page--;
       this.parent.fetch(this.page);
+      riot.data[path + 'Page'] = this.page;
     }
 
     next() {
       if (this.page < this.totalPage) this.page++;
       this.parent.fetch(this.page);
+      riot.data[path + 'Page'] = this.page;
     }
 
     last() {
       this.page = this.totalPage;
       this.parent.fetch(this.page);
+      riot.data[path + 'Page'] = this.page;
     }
   </script>
 </pagination>

@@ -21,15 +21,17 @@
               <span if={!editing}>{l.content}</span>
               <input if={editing} type="text" class="js-item form-control" value={l.content}>
             </td>
-            <td if={!parent.opts.readonly && !editing} ><span if={parent.opts.setting && user.type == 'admin'} class="btn badge bg-blue" onclick={config}>参数设置</span> <span class="btn badge bg-red" onclick={del}>删除</span></td>
+            <td if={i == 0 && !parent.opts.readonly && !editing} ><span if={parent.opts.setting && user.type == 'admin'} class="btn badge bg-blue" onclick={config}>参数设置</span> <span class="btn badge bg-red" onclick={del} data-intro='点按钮删除此条数据'>删除</span></td>
+
+            <td if={i != 0 && !parent.opts.readonly && !editing} ><span if={parent.opts.setting && user.type == 'admin'} class="btn badge bg-blue" onclick={config}>参数设置</span> <span class="btn badge bg-red" onclick={del}>删除</span></td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="box-footer" if={!opts.readonly}>
       <div if={!editing} class="input-group">
-        <input type="text" class="form-control" name="newitem" placeholder="输入{text}并添加到列表" onkeypress={add}>
-        <div class="input-group-addon btn" onclick={add}>
+        <input type="text" class="form-control" name="newitem" placeholder="输入{text}并添加到列表" onkeypress={add} data-intro='输入信息，回车可增加'>
+        <div class="input-group-addon btn" onclick={add} data-intro='或者点按钮也可增加'>
           <i class="fa fa-plus"></i>
         </div>
       </div>
