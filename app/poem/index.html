@@ -76,7 +76,7 @@
     this.on('mount', function() {
       var curPage = riot.data['poem/' + this.type + 'Page'];
       this.tags.pagination.page = curPage || 1;
-      this.fetch(curPage || 1, {'poem.type': this.type});
+      this.fetch(curPage || 1);
     }).on('update', function() {
       if (!this.type) {
         this.type = this.opts.pathId;
@@ -84,6 +84,11 @@
     });
 
     fetch(pageNumber, data) {
+      if (data) {
+        data['poem.type'] = this.type;
+      } else {
+        data = {'poem.type': this.type};
+      }
       $.ajax({
         url: riot.config.apiPrefix + 'knowledge/poem/list/' + pageNumber,
         type: 'get',
@@ -112,7 +117,7 @@
       }).done(function(data) {
         if(data.result=='true'){
           $.notify('<strong>审核成功！</strong>', {type: 'success'});
-          _this.fetch(_this.pageNumber, {'poem.type': _this.type});
+          _this.fetch(_this.pageNumber);
         }else{
           $.notify('<strong>审核失败!</strong>', {type: 'error'});
         }
@@ -129,7 +134,7 @@
       }).done(function(data) {
         if(data.result=='true'){
           $.notify('<strong>删除成功</strong>', {type: 'success'});
-          _this.fetch(_this.pageNumber, {'poem.type': _this.type});
+          _this.fetch(_this.pageNumber);
         }else{
           $.notify('<strong>删除失败!</strong>', {type: 'error'});
         }
@@ -141,7 +146,6 @@
     search(e) {
       if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
         var data = {
-          'poem.type': this.type,
           'poem.name': this.keyword.value
         };
         this.tags.pagination.page = 1;
