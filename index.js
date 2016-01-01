@@ -22,8 +22,14 @@ var activeMenu = function(path, pathId) {
 };
 
 var mountSome = function(opts) {
+  if(!riot.tags.raw) {
+    riot.tags.raw = riot.mount('raw');
+  }
   if(!riot.tags.feedback) {
     riot.tags.feedback = riot.mount('feedback');
+  }
+  if(!riot.tags.help) {
+    riot.tags.help = riot.mount('help');
   }
   if(!riot.tags.profile) {
     riot.tags.profile = riot.mount('profile');

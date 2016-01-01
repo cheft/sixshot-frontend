@@ -50,7 +50,7 @@
             <span class="badge bg-red btn btn-lg" style="cursor: pointer;" onclick={clearMessage}>清空聊天记录</span>
           </div>
         </div>
-        <div class="box-body" style="min-height: {riot.config.panelHeight - 100}px;">
+        <div class="box-body" style="min-height: {riot.config.panelHeight - 160}px;">
           <!-- <div id="box" class="direct-chat-messages" style="height: {riot.config.panelHeight - 100}px; overflow: auto;"> -->
 
            <div id="box" class="direct-chat-messages" style="height: 100%;">
@@ -63,7 +63,9 @@
               </div>
               <img class="direct-chat-img" src="/assets/vendors/adminlte/img/{type == 'user' ? 'user2-160x160.jpg' : 'er-duo-01.jpg'}">
               <div class="direct-chat-text" onclick={play}>
-                <span><i class="fa fa-play left"></i>{content}</span>
+                <!-- <span><i class="fa fa-play left"></i>{content}</span> -->
+                <span><i class="fa fa-play left"></i><raw content="{content}"/></span>
+                <!-- <raw content="{content}"/> -->
               </div>
             </div>
           </div>
@@ -127,6 +129,30 @@
       this.update();
     };
 
+    unknownHandler(msg){
+      var msgs = [
+          '你说的是什么意思',
+          '这话是什么意思',
+          '啥意思',
+          '什么意思'
+        ];
+
+      var i, isUnknown = false;
+      for(i in msgs){
+        if(msg.indexOf(msgs[i]) != -1){
+          isUnknown = true;
+          break;
+        }
+      }
+
+
+      if(isUnknown){
+        msg = msg + '我不明白。你<a href="#dialog-form" >告诉我</a>问题和答案好不好？';
+      }
+
+      return msg;
+    }
+
     send(e) {
       if (!this.message.value) {
         return true;
@@ -138,7 +164,9 @@
           url: riot.config.apiPrefix + 'knowledge/dialog/ask/' + this.message.value,
           type: 'post'
         }).done(function(data) {
-          _this.addMessage('system', data.result);
+          var message = data.result;
+          message = _this.unknownHandler(message);
+          _this.addMessage('system', message);
           _this.update();
         })
         this.message.value = '';
@@ -220,6 +248,8 @@
           audio.play();
           }
         });
+
+      return true;
     };
 
     

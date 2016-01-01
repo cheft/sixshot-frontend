@@ -28,7 +28,7 @@
             <div class="box-body">
               <div class="form-group">
                 <label>问答描述</label>
-                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="问答描述" onblur={validateName} data-intro='输入问答描述'>
+                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="问答描述" onblur={validateName} data-intro='输入问答描述，为对问答内容的主要概括。如“名字”、“年龄”、“属相”等。'>
               </div>
               <div class="row">
                 <div class="col-md-6">
@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="box-footer">
-              <button type="button" class="btn btn-primary" onclick={saveDialog} data-intro='保存信息'>保存</button>
+              <button type="button" class="btn btn-primary" onclick={saveDialog} data-intro='保存信息。注意添加到列表的信息才会保存，录入到输入框但没有回车或点击(+)按钮的信息不会被保存。保存后在聊天页面中点击右上角“刷新知识库”按钮后稍等片刻(二十几秒左右)，您的问题尔朵就可以回答了。'>保存</button>
               <button type="button" class="btn btn-cancel" onclick={cancel} data-intro='取消这次操作'>取消</button>
             </div>
           </form>
@@ -158,11 +158,14 @@
         },
         { 
           intro: '<img class="intro-img" src="/assets/img/reference/ref-03.jpg">'
+        },
+        { 
+          intro: '<img class="intro-img" src="/assets/img/reference/ref-04.jpg">'
         }
       ],
       tooltipClass: 'tooltip-img',
-      nextLabel: '下一步',
-      prevLabel: '上一步',
+      nextLabel: '下一个',
+      prevLabel: '上一个',
       skipLabel: '关闭',
       doneLabel: '关闭',
       // showBullets: false,

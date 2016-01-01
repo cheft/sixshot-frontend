@@ -6,6 +6,7 @@
     <div class="pull-left info">
       <p>{user.nickName || user.username}&nbsp;</p>
       <!-- Status -->
+      <a href="javascript:;" onclick={openHelp}><i class="fa fa fa-question-circle text-yellow"></i> 帮助</a>
       <a href="javascript:;" onclick={openFeedback}><i class="fa fa-briefcase text-success"></i> 反馈建议</a>
     </div>
   </div>
@@ -21,6 +22,10 @@
     this.user = riot.data.user;
     openFeedback() {
       riot.tags.feedback[0].trigger('open');
+    }
+
+    openHelp() {
+      riot.tags.help[0].trigger('open');
     }
   </script>
 </navigator>
