@@ -17,6 +17,7 @@
     <li each={riot.data.dictionaries}><a href="#poem/{key}"><i class="fa {icon ? icon : 'fa-ioxhost'}"></i> <span>{value}</span></a></li>
     <li if={user.type=='admin'}><a href="#user"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
     <li if={user.type=='admin'}><a href="#feedbacks"><i class="fa fa-briefcase"></i> <span>反馈管理</span></a></li>
+    <li if={user.type=='admin'}><a href="#unknown"><i class="fa fa-briefcase"></i> <span>未知问题管理</span></a></li>
     <li if={user.type=='admin'}><a href="#settings"><i class="fa fa-cog"></i><span>系统设置</span></a></li>
   <script>
     this.user = riot.data.user;

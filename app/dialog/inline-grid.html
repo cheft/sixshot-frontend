@@ -30,7 +30,7 @@
     </div>
     <div class="box-footer" if={!opts.readonly}>
       <div if={!editing} class="input-group">
-        <input type="text" class="form-control" name="newitem" placeholder="输入{text}并添加到列表" onkeypress={add} data-intro={intro}>
+        <input type="text" class="form-control" name="newitem" placeholder={placeholder} onkeypress={add} data-intro={intro}>
         <div class="input-group-addon btn" onclick={add} data-intro='点此按钮也可增加到列表'>
           <i class="fa fa-plus"></i>
         </div>
@@ -46,17 +46,20 @@
     this.user = riot.data.user;
     var _this = this;
     this.list = [];
-    var text, intro;
+    var text, placeholder, intro;
     if(this.opts.type == 'ask'){
       text = '问题';
+      placeholder = "输入问题后回车或点击 '+' 添加到列表，多想几个问题哦！";
       intro = '输入问题，问题开头不要包含问句的主语（主语“你”系统会自动添加）。同一个问题可以有不同的问法，如“叫什么名字”、“叫啥名字”是问姓名的两种问法。可以省略的词语可以使用括号“（）”括起来表示可以省略，如“叫什么（名字）？”、“几岁（了）？”，如果不想使用括号则可以两条分开添加，如“叫什么？”、“叫什么名字？”。录入完后回车添加到列表。';
     }else{
-      intro = '输入答案。同一个问题可以有多个不同的回答，如回答姓名的时候可以回答“我叫尔朵。”也可以回答“我叫尔朵，你呢？”也可以是“我叫尔朵，你叫什么呢？”。录入完后回车添加到列表。';
       text = '答案';
+      placeholder = "输入答案后回车或点击 '+' 添加到列表，多想几种回答方式哦！";
+      intro = '输入答案。同一个问题可以有多个不同的回答，如回答姓名的时候可以回答“我叫尔朵。”也可以回答“我叫尔朵，你呢？”也可以是“我叫尔朵，你叫什么呢？”。录入完后回车添加到列表。';
     }
 
     this.text = text;
     this.intro = intro;
+    this.placeholder = placeholder;
 
     addItem(){
       $.ajax({
@@ -87,6 +90,16 @@
           $.notify('<strong>请输入内容！</strong>', {type: 'error', delay:50});
           return true;
         }
+        var text = this.newitem.value.trim();
+        if(/用英语怎么说$/.test(text)
+          ||/用英语怎么说\?$/.test(text)
+          ||/用英语怎么说？$/.test(text)
+          ||/怎么说$/.test(text)
+          ||/怎么说\?$/.test(text)
+          ||/怎么说？$/.test(text)){
+          $.notify('<strong>英语内容建议在&nbsp;<a href="#poem-form/&english">英语</a>&nbsp;功能中录入！</strong>', {type: 'error', delay:10000});
+        }
+
         var str = '你';
         if(this.newitem.value.substr(0, str.length)==str){
           this.newitem.value = this.newitem.value.substr(1);

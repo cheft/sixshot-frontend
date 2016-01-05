@@ -1,0 +1,122 @@
+<unknown>
+  <section class="content-header">
+    <h1>
+      未知问题列表
+      <small>可查所有未知问题</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> 系统</a></li>
+      <li class="active">未知问题管理</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-primary" style="min-height: {riot.config.panelHeight}px;">
+          <div class="box-header">
+            <h3 class="box-title">&nbsp;</h3>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search}>
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" onclick={search}><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <tr>
+                <th style="text-align: center;">#</th>
+                <th width="60%">问题</th>
+                <th>反馈人</th>
+                <th>反馈时间</th>
+                <th>操作</th>
+              </tr>
+              <tr each={item, i in list}>
+                <td style="text-align: center;">{i + 1 + ((pageNumber - 1) * pageSize)}</td>
+                <td>{item.ask}</td>
+                <td>{item.creatorName}</td>
+                <td>{item.createDate}</td>
+                <td>
+                  <a href="javascript:;" onclick={resolve} class="label label-success">解决</a>
+                  <a href="javascript:;" onclick={remove} class="label label-danger">删除</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="box-footer clearfix">
+            <pagination></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    NProgress.start();
+    var _this = this;
+    this.on('mount', function() {
+      var curPage = riot.data.unknownsPage;
+      this.tags.pagination.page = curPage || 1;
+      this.fetch(curPage || 1);
+    });
+
+    fetch(pageNumber, d) {
+      $.ajax({
+        url: riot.config.apiPrefix + 'system/unknown/list/' + pageNumber,
+        type: 'get',
+        data: d
+      }).done(function(data) {
+        _this.update(data);
+        NProgress.done();
+      }).fail(function() {
+        console.log('error');
+      });
+    }
+
+    remove(e) {
+      var id = e.item.item.id;
+      $.ajax({
+        url: riot.config.apiPrefix + 'system/unknown/delete/' + id,
+        type: 'get'
+      }).done(function(data) {
+        if(data.result=='true'){
+          $.notify('<strong>删除成功</strong>', {type: 'success'});
+          _this.fetch(_this.pageNumber);
+        }else{
+          $.notify('<strong>删除失败!</strong>', {type: 'error'});
+        }
+      }).fail(function() {
+        console.log('error');
+      });
+    }
+
+    resolve(e) {
+      var id = e.item.item.id;
+      $.ajax({
+        url: riot.config.apiPrefix + 'system/unknown/resolve/' + id,
+        type: 'post'
+      }).done(function(data) {
+        if(data.result=='true'){
+          $.notify('<strong>问题已标记为解决状态</strong>', {type: 'success'});
+          _this.fetch(_this.pageNumber);
+        }else{
+          $.notify('<strong>操作失败!</strong>', {type: 'error'});
+        }
+      }).fail(function() {
+        console.log('error');
+      });
+    }
+
+    search(e) {
+      if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
+        var data = {};
+        data['unknown.ask'] = this.keyword.value;
+        this.tags.pagination.page = 1;
+        this.fetch(1, data);
+      }
+      return true;
+    }
+  </script>
+</unknown>

@@ -23,7 +23,7 @@
                   <div class="form-group">
                     <!-- <label>{riot.data.dictObj[poem.type]}名</label> -->
                     <label>{this.poemNameTitle}</label>
-                    <input type="text" class="form-control" name="name" value={poem.name} placeholder="" onblur={validateName}>
+                    <input type="text" class="form-control" name="name" value={poem.name} placeholder={poemNamePh} onblur={validateName}>
                   </div>
                 </div>
                 <div class="col-md-6" if={poem.type=='ancient-poetry' || poem.type=='nursery-rhymes'}>
@@ -49,7 +49,7 @@
               </div>
               <div class="form-group">
                 <label>{this.poemContentTitle}</label>
-                <textarea class="form-control" rows="5" name="content" placeholder="">{poem.content}</textarea>
+                <textarea class="form-control" rows="5" name="content" placeholder={poemContentPh}>{poem.content}</textarea>
               </div>
               <div class="form-group" if={poem.type=='ancient-poetry' || poem.type=='brain-teaser'}>
                 <label>{this.poemMainIdeaTitle}</label>
@@ -89,6 +89,9 @@
     }else if(this.poem.type=='english'){
       this.poemNameTitle = '中文';
       this.poemContentTitle = '英文';
+
+      this.poemNamePh = '如：“爸爸”、“妈妈”、“苹果”、“电脑”，填写一个词组即可。';
+      this.poemContentPh = '如：“dad”、“mom”、“apple”、“computer”，填写一个与中文相对应的英文即可。';
     }else if(this.poem.type=='saying'){
       this.poemNameTitle = '谜面';
       this.poemContentTitle = '谜底';

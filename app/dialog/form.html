@@ -18,6 +18,8 @@
     <div class="alert alert-success alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       <h4><i class="icon fa fa-info"></i> 提示!</h4>
+      如不清楚如何添加，请点击上方的 “录入帮助” 或 “查看事例” 进行参考。也可以点击左侧的 “帮助” 寻求支持。
+      <br/>
       目前我们塑造的“尔朵”，为年龄3-6岁的女孩，天真、童趣、有礼。各位亲在录入问答时，请结合此年龄段儿童的心理进行录入。
     </div>
     <div class="row">
@@ -28,7 +30,7 @@
             <div class="box-body">
               <div class="form-group">
                 <label>问答描述</label>
-                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="问答描述" onblur={validateName} data-intro='输入问答描述，为对问答内容的主要概括。如“名字”、“年龄”、“属相”等。'>
+                <input type="text" class="form-control" name="name" value={dialog.name} placeholder="输入对问答的描述，如“年龄”、“姓名”。描述应该精确到具体的点上，不要描述某些方向上的问题，如“问答”、“诗歌”。" onblur={validateName} data-intro='输入问答描述，为对问答内容的主要概括。如“名字”、“年龄”、“属相”等。'>
               </div>
               <div class="row">
                 <div class="col-md-6">

@@ -129,10 +129,13 @@
       this.update();
     };
 
-    unknownHandler(msg){
+    // ask  问题， msg 回答
+    var href = '你<a href="#dialog-form" >告诉我</a>问题和答案好不好？';
+    unknownHandler(ask, msg){
       var msgs = [
           '你说的是什么意思',
           '这话是什么意思',
+          '我不明白你的意思',
           '啥意思',
           '什么意思'
         ];
@@ -147,7 +150,11 @@
 
 
       if(isUnknown){
-        msg = msg + '我不明白。你<a href="#dialog-form" >告诉我</a>问题和答案好不好？';
+        if(msg.indexOf("不明白") != -1){
+          msg = '我不明白你的意思，' + href; 
+        }else{
+          msg = msg + '我不明白。' + href;
+        }
       }
 
       return msg;
@@ -165,10 +172,11 @@
           type: 'post'
         }).done(function(data) {
           var message = data.result;
-          message = _this.unknownHandler(message);
+          message = _this.unknownHandler(_this.message.value, message);
           _this.addMessage('system', message);
           _this.update();
         })
+
         this.message.value = '';
         this.update();
       }
@@ -212,7 +220,9 @@
       */
     play(e) {
         /***********************************************************以下签名过程需根据实际应用信息填入***************************************************/
-
+        if (e.target.tagName == 'A') {
+          return true;
+        }
         var appid = "56667486";                              //应用APPID，在open.voicecloud.cn上申请即可获得
         var timestamp = new Date().toLocaleTimeString();                      //当前时间戳，例new Date().toLocaleTimeString()
             var expires = 60000;                          //签名失效时间，单位:ms，例60000
@@ -232,7 +242,9 @@
       }
 
       var params = { "params" : "aue = speex-wb;7, ent = intp65, spd = 50, vol = 50, tte = utf8, caller.appid=" + appid + ",timestamp=" + timestamp + ",expires=" + expires + ",vcn=" + vcn, "signature" : signature, "gat" : "mp3"};
-      session.start(params, e.item.content, function (err, obj)
+      var text = $('<div>' + e.item.content + '</div>').text();
+      console.log(text);
+      session.start(params, text, function (err, obj)
           {
           if(err) {
             alert("语音合成发生错误，错误代码 ：" + err);
@@ -248,8 +260,6 @@
           audio.play();
           }
         });
-
-      return true;
     };
 
     
