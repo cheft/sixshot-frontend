@@ -46,8 +46,8 @@ module.exports = {
     },
   ],
 
-  apiPrefix: 'http://172.16.1.97/'
-  // apiPrefix: 'http://ear-eye.com/'
+  // apiPrefix: 'http://172.16.1.97/'
+  apiPrefix: 'http://ear-eye.com/'
   // apiPrefix: 'api/'
   // apiPrefix: '/'
 }

@@ -19,7 +19,7 @@
             </div>
             <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 150px;">
-                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search}>
+                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search} value={riot.data.poemKeyword}>
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default" onclick={search}><i class="fa fa-search"></i></button>
                 </div>
@@ -76,6 +76,7 @@
     this.on('mount', function() {
       var curPage = riot.data['poem/' + this.type + 'Page'];
       this.tags.pagination.page = curPage || 1;
+      this.params = {'poem.name': this.keyword.value};
       this.fetch(curPage || 1);
     }).on('update', function() {
       if (!this.type) {
@@ -83,16 +84,16 @@
       }
     });
 
-    fetch(pageNumber, data) {
-      if (data) {
-        data['poem.type'] = this.type;
+    fetch(pageNumber) {
+      if (_this.params) {
+        _this.params['poem.type'] = this.type;
       } else {
-        data = {'poem.type': this.type};
+        _this.params = {'poem.type': this.type};
       }
       $.ajax({
         url: riot.config.apiPrefix + 'knowledge/poem/list/' + pageNumber,
         type: 'get',
-        data: data
+        data: _this.params
       }).done(function(data) {
         _this.update(data);
         NProgress.done();
@@ -145,11 +146,10 @@
 
     search(e) {
       if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
-        var data = {
-          'poem.name': this.keyword.value
-        };
         this.tags.pagination.page = 1;
-        this.fetch(1, data);
+        this.params = {'poem.name': this.keyword.value};
+        riot.data.poemKeyword = this.keyword.value;
+        this.fetch(1);
       }
       return true;
     }

@@ -17,7 +17,7 @@
             <h3 class="box-title">&nbsp;</h3>
             <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 150px;">
-                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search}>
+                <input type="text" name="keyword" class="form-control pull-right" placeholder="Search" onkeypress={search} value={riot.data.feedbackKeyword}>
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default" onclick={search}><i class="fa fa-search"></i></button>
                 </div>
@@ -58,14 +58,15 @@
     this.on('mount', function() {
       var curPage = riot.data.feedbacksPage;
       this.tags.pagination.page = curPage || 1;
+      this.params = {'feedback.content': this.keyword.value};
       this.fetch(curPage || 1);
     });
 
-    fetch(pageNumber, d) {
+    fetch(pageNumber) {
       $.ajax({
         url: riot.config.apiPrefix + 'system/feedback/list/' + pageNumber,
         type: 'get',
-        data: d
+        data: _this.params
       }).done(function(data) {
         _this.update(data);
         NProgress.done();
@@ -93,10 +94,10 @@
 
     search(e) {
       if ((e instanceof KeyboardEvent && e.which == 13) || e instanceof MouseEvent) {
-        var data = {};
-        data['feedback.content'] = this.keyword.value;
         this.tags.pagination.page = 1;
-        this.fetch(1, data);
+        this.params = {'feedback.content': this.keyword.value};
+        riot.data.feedbackKeyword = this.keyword.value;
+        this.fetch(1);
       }
       return true;
     }
